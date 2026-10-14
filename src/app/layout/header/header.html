@@ -1,0 +1,70 @@
+<mat-toolbar color="primary" class="header">
+  <div class="header__izq">
+    @if (isAuthenticated()) {
+      <button
+        mat-icon-button
+        aria-label="Abrir menu"
+        matTooltip="Menu"
+        (click)="menuToggle.emit()"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+    }
+
+    <a class="header__marca" routerLink="/">
+      <mat-icon>local_hospital</mat-icon>
+      <span class="header__marca-texto">Clinica Virtual</span>
+    </a>
+  </div>
+
+  <span class="header__spacer"></span>
+
+  @if (!isAuthenticated()) {
+    <div class="header__der">
+      <span class="header__bienvenida">Bienvenido a la clinica virtual</span>
+      <a mat-stroked-button routerLink="/login">Ingresar</a>
+      <a mat-flat-button routerLink="/registro">Registrarse</a>
+    </div>
+  } @else {
+    <div class="header__der">
+      <button
+        mat-icon-button
+        aria-label="Notificaciones"
+        matTooltip="Notificaciones (disponible en la semana 3)"
+        disabled
+      >
+        <mat-icon matBadge="•" matBadgeColor="warn" matBadgeSize="small">notifications</mat-icon>
+      </button>
+
+      <span class="header__usuario">
+        {{ usuario()?.nombre }} {{ usuario()?.apellido }}
+      </span>
+
+      <button
+        mat-icon-button
+        aria-label="Informacion del usuario"
+        matTooltip="Tipo de usuario"
+        [matMenuTriggerFor]="infoMenu"
+      >
+        <mat-icon>info</mat-icon>
+      </button>
+      <mat-menu #infoMenu="matMenu">
+        <div class="header__info">
+          <p class="header__info-rol">
+            <mat-icon inline>badge</mat-icon>
+            {{ rol() ? rolLabel[rol()!] : '' }}
+          </p>
+          @if (usuario(); as u) {
+            <p class="header__info-dato">{{ u.email }}</p>
+            <p class="header__info-dato">DNI {{ u.dni }}</p>
+          }
+        </div>
+      </mat-menu>
+
+      <button mat-stroked-button (click)="cerrarSesion()">
+        <mat-icon>logout</mat-icon>
+        Cerrar sesion
+      </button>
+    </div>
+  }
+</mat-toolbar>

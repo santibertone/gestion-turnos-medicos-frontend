@@ -1,0 +1,40 @@
+.estado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.75rem;
+  min-height: 60vh;
+  padding: 2rem 1.5rem;
+
+  &__icono {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    color: var(--mat-sys-primary);
+
+    &--error {
+      color: var(--mat-sys-error);
+    }
+  }
+
+  &__codigo {
+    margin: 0;
+    font-size: 5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--mat-sys-primary);
+  }
+
+  &__titulo {
+    margin: 0;
+    font: var(--mat-sys-headline-medium);
+  }
+
+  &__texto {
+    margin: 0 0 1rem;
+    max-width: 420px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}

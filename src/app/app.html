@@ -1,0 +1,16 @@
+<app-header (menuToggle)="toggleMenu()" />
+
+<mat-sidenav-container class="shell">
+  @if (isAuthenticated()) {
+    <mat-sidenav #drawer mode="over" class="shell__sidenav">
+      <app-menu (navegar)="drawer.close()" />
+    </mat-sidenav>
+  }
+
+  <mat-sidenav-content class="shell__contenido">
+    <main class="shell__main">
+      <router-outlet />
+    </main>
+    <app-footer />
+  </mat-sidenav-content>
+</mat-sidenav-container>

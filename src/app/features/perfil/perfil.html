@@ -1,0 +1,52 @@
+<div class="perfil">
+  <mat-card class="perfil__card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Mi perfil</mat-card-title>
+      <mat-card-subtitle>Tus datos personales</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (cargando()) {
+        <div class="perfil__cargando">
+          <mat-spinner diameter="36" />
+        </div>
+      } @else if (error(); as e) {
+        <div class="perfil__error" role="alert">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ e }}</span>
+        </div>
+      } @else if (usuario(); as u) {
+        <div class="perfil__avatar">
+          <mat-icon>account_circle</mat-icon>
+          <div>
+            <p class="perfil__nombre">{{ u.nombre }} {{ u.apellido }}</p>
+            <p class="perfil__rol">{{ rolLabel[u.rol] }}</p>
+          </div>
+        </div>
+
+        <mat-list>
+          <mat-list-item>
+            <mat-icon matListItemIcon>badge</mat-icon>
+            <span matListItemTitle>DNI</span>
+            <span matListItemLine>{{ u.dni }}</span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon matListItemIcon>mail</mat-icon>
+            <span matListItemTitle>Email</span>
+            <span matListItemLine>{{ u.email }}</span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon matListItemIcon>call</mat-icon>
+            <span matListItemTitle>Telefono</span>
+            <span matListItemLine>{{ u.telefono || 'Sin datos' }}</span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon matListItemIcon>cake</mat-icon>
+            <span matListItemTitle>Fecha de nacimiento</span>
+            <span matListItemLine>{{ u.fecha_nacimiento | date: 'dd/MM/yyyy' }}</span>
+          </mat-list-item>
+        </mat-list>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

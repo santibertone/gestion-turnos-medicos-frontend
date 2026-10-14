@@ -1,0 +1,16 @@
+<nav class="menu">
+  <mat-nav-list>
+    @for (item of items(); track item.ruta) {
+      <a
+        mat-list-item
+        [routerLink]="item.ruta"
+        routerLinkActive="menu__activo"
+        [routerLinkActiveOptions]="{ exact: item.ruta === '/' }"
+        (click)="navegar.emit()"
+      >
+        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <span matListItemTitle>{{ item.label }}</span>
+      </a>
+    }
+  </mat-nav-list>
+</nav>

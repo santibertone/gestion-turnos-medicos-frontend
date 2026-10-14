@@ -1,0 +1,23 @@
+.shell {
+  // Alto total menos la barra superior (64px desktop / 56px mobile).
+  height: calc(100dvh - 64px);
+
+  &__sidenav {
+    width: 260px;
+  }
+
+  &__contenido {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__main {
+    flex: 1 1 auto;
+  }
+}
+
+@media (max-width: 599px) {
+  .shell {
+    height: calc(100dvh - 56px);
+  }
+}

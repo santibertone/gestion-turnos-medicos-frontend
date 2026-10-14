@@ -1,0 +1,79 @@
+<div class="auth">
+  <mat-card class="auth__card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Iniciar sesion</mat-card-title>
+      <mat-card-subtitle>Ingresa con tu DNI y contrasena</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (errorBackend(); as error) {
+        <div class="auth__error" role="alert">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ error }}</span>
+        </div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="enviar()" class="auth__form">
+        <mat-form-field appearance="outline">
+          <mat-label>DNI</mat-label>
+          <input
+            matInput
+            formControlName="dni"
+            inputmode="numeric"
+            autocomplete="username"
+          />
+          <mat-icon matPrefix>badge</mat-icon>
+          @if (form.controls.dni.hasError('required')) {
+            <mat-error>El DNI es obligatorio.</mat-error>
+          } @else if (form.controls.dni.hasError('pattern')) {
+            <mat-error>El DNI debe ser numerico.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Contrasena</mat-label>
+          <input
+            matInput
+            formControlName="password"
+            [type]="ocultarPassword() ? 'password' : 'text'"
+            autocomplete="current-password"
+          />
+          <mat-icon matPrefix>lock</mat-icon>
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="ocultarPassword.set(!ocultarPassword())"
+            [attr.aria-label]="ocultarPassword() ? 'Mostrar contrasena' : 'Ocultar contrasena'"
+          >
+            <mat-icon>{{ ocultarPassword() ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </button>
+          @if (form.controls.password.hasError('required')) {
+            <mat-error>La contrasena es obligatoria.</mat-error>
+          }
+        </mat-form-field>
+
+        <button
+          mat-flat-button
+          type="submit"
+          class="auth__submit"
+          [disabled]="cargando()"
+        >
+          @if (cargando()) {
+            <mat-spinner diameter="20" />
+          } @else {
+            <ng-container>
+              <mat-icon>login</mat-icon>
+              Ingresar
+            </ng-container>
+          }
+        </button>
+      </form>
+    </mat-card-content>
+
+    <mat-card-footer class="auth__footer">
+      <span>No tenes cuenta?</span>
+      <a routerLink="/registro">Registrate aca</a>
+    </mat-card-footer>
+  </mat-card>
+</div>
