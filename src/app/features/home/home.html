@@ -1,0 +1,49 @@
+@if (!isAuthenticated()) {
+  <section class="hero">
+    <mat-icon class="hero__icono">local_hospital</mat-icon>
+    <h1 class="hero__titulo">Clinica Virtual</h1>
+    <p class="hero__subtitulo">
+      Gestiona tus turnos medicos de forma simple, desde donde estes.
+    </p>
+    <div class="hero__acciones">
+      <a mat-flat-button routerLink="/registro">
+        <mat-icon>person_add</mat-icon>
+        Registrarme
+      </a>
+      <a mat-stroked-button routerLink="/login">
+        <mat-icon>login</mat-icon>
+        Ingresar
+      </a>
+    </div>
+  </section>
+
+  <section class="features">
+    <h2 class="features__titulo">Como paciente registrado vas a poder</h2>
+    <div class="features__grid">
+      @for (f of funcionalidades; track f.titulo) {
+        <mat-card class="features__card" appearance="outlined">
+          <mat-card-content>
+            <mat-icon class="features__card-icono">{{ f.icon }}</mat-icon>
+            <h3 class="features__card-titulo">{{ f.titulo }}</h3>
+            <p class="features__card-texto">{{ f.texto }}</p>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  </section>
+} @else {
+  <section class="bienvenida">
+    <h1 class="bienvenida__titulo">
+      Hola, {{ usuario()?.nombre }} 👋
+    </h1>
+    <p class="bienvenida__texto">
+      Ingresaste como
+      <strong>{{ rol() ? rolLabel[rol()!] : '' }}</strong>.
+      Elegi una funcion del menu para comenzar.
+    </p>
+    <a mat-flat-button routerLink="/perfil">
+      <mat-icon>account_circle</mat-icon>
+      Ver mi perfil
+    </a>
+  </section>
+}
