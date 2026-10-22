@@ -1,0 +1,83 @@
+<div class="pagina">
+  <div class="pagina__header">
+    <h1 class="pagina__titulo"><mat-icon>group</mat-icon> Usuarios</h1>
+    <button mat-flat-button (click)="nuevo()">
+      <mat-icon>person_add</mat-icon> Nuevo usuario
+    </button>
+  </div>
+
+  <div class="barra-filtros">
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput #n (input)="fNombre.set(n.value)" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Apellido</mat-label>
+      <input matInput #a (input)="fApellido.set(a.value)" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Rol</mat-label>
+      <mat-select [value]="fRol()" (valueChange)="fRol.set($event)">
+        <mat-option value="">Todos</mat-option>
+        @for (r of roles; track r) { <mat-option [value]="r">{{ rolLabel[r] }}</mat-option> }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Sede</mat-label>
+      <mat-select [value]="fSede()" (valueChange)="fSede.set($event)">
+        <mat-option [value]="null">Todas</mat-option>
+        @for (s of sedes(); track s.id) { <mat-option [value]="s.id">{{ s.nombre }}</mat-option> }
+      </mat-select>
+    </mat-form-field>
+    <button mat-flat-button (click)="filtrar()"><mat-icon>filter_alt</mat-icon> Filtrar</button>
+    <button mat-stroked-button (click)="limpiar()">Limpiar</button>
+  </div>
+
+  @if (cargando()) {
+    <app-cargando />
+  } @else if (usuarios().length === 0) {
+    <app-sin-datos mensaje="No hay usuarios para estos filtros." icono="group" />
+  } @else {
+    <mat-card class="tabla-card" appearance="outlined">
+      <div class="tabla-wrap">
+        <table mat-table [dataSource]="usuarios()" class="tabla">
+          <ng-container matColumnDef="nombre">
+            <th mat-header-cell *matHeaderCellDef>Nombre</th>
+            <td mat-cell *matCellDef="let u">{{ u.apellido }}, {{ u.nombre }}</td>
+          </ng-container>
+          <ng-container matColumnDef="dni">
+            <th mat-header-cell *matHeaderCellDef>DNI</th>
+            <td mat-cell *matCellDef="let u">{{ u.dni }}</td>
+          </ng-container>
+          <ng-container matColumnDef="rol">
+            <th mat-header-cell *matHeaderCellDef>Rol</th>
+            <td mat-cell *matCellDef="let u">{{ etiquetaRol(u.rol) }}</td>
+          </ng-container>
+          <ng-container matColumnDef="sede">
+            <th mat-header-cell *matHeaderCellDef>Sede</th>
+            <td mat-cell *matCellDef="let u">{{ u.sede || '-' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef class="acciones">Acciones</th>
+            <td mat-cell *matCellDef="let u">
+              <div class="acciones">
+                <button mat-icon-button matTooltip="Editar" (click)="editar(u)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+        </table>
+      </div>
+      <mat-paginator
+        [length]="total()"
+        [pageIndex]="pagina()"
+        [pageSize]="tamano()"
+        [pageSizeOptions]="[10, 25, 50]"
+        (page)="paginar($event)"
+      />
+    </mat-card>
+  }
+</div>

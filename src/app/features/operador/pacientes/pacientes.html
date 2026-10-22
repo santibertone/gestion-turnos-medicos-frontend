@@ -1,0 +1,21 @@
+<div class="pagina">
+  <div class="pagina__header">
+    <h1 class="pagina__titulo"><mat-icon>person_add</mat-icon> Alta de paciente</h1>
+  </div>
+
+  <mat-card appearance="outlined" class="form-card">
+    <mat-card-content>
+      @if (error(); as e) {
+        <div class="form-aviso-error" role="alert"><mat-icon>error_outline</mat-icon><span>{{ e }}</span></div>
+      }
+      <app-paciente-form />
+      <div class="acciones-form">
+        <button mat-flat-button (click)="registrar()" [disabled]="cargando()">
+          @if (cargando()) { <mat-spinner diameter="20" /> } @else {
+            <span><mat-icon>save</mat-icon> Registrar paciente</span>
+          }
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

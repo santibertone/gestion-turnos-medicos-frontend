@@ -1,0 +1,23 @@
+.entidad-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 360px;
+  margin-top: 0.5rem;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.form-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background-color: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+  font-size: 0.9rem;
+}

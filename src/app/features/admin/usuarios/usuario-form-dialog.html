@@ -1,0 +1,106 @@
+<h2 mat-dialog-title>{{ edicion ? 'Editar usuario' : 'Nuevo usuario' }}</h2>
+
+<mat-dialog-content>
+  @if (error(); as e) {
+    <div class="form-aviso-error" role="alert">
+      <mat-icon>error_outline</mat-icon><span>{{ e }}</span>
+    </div>
+  }
+
+  <form [formGroup]="form" class="form-grid" (ngSubmit)="guardar()">
+    <div class="form-fila">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre" />
+        @if (form.controls.nombre.hasError('required')) { <mat-error>Obligatorio.</mat-error> }
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Apellido</mat-label>
+        <input matInput formControlName="apellido" />
+        @if (form.controls.apellido.hasError('required')) { <mat-error>Obligatorio.</mat-error> }
+      </mat-form-field>
+    </div>
+
+    <div class="form-fila">
+      <mat-form-field appearance="outline">
+        <mat-label>DNI</mat-label>
+        <input matInput formControlName="dni" inputmode="numeric" />
+        @if (form.controls.dni.hasError('required')) { <mat-error>Obligatorio.</mat-error> }
+        @else if (form.controls.dni.hasError('pattern')) { <mat-error>7 a 9 digitos.</mat-error> }
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha de nacimiento</mat-label>
+        <input matInput [matDatepicker]="dp" formControlName="fechaNacimiento" [max]="maxFecha" readonly />
+        <mat-datepicker-toggle matIconSuffix [for]="dp" />
+        <mat-datepicker #dp startView="multi-year" />
+        @if (form.controls.fechaNacimiento.hasError('required')) { <mat-error>Obligatoria.</mat-error> }
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" />
+      @if (form.controls.email.hasError('required')) { <mat-error>Obligatorio.</mat-error> }
+      @else if (form.controls.email.hasError('email')) { <mat-error>Email invalido.</mat-error> }
+    </mat-form-field>
+
+    <div class="form-fila">
+      <mat-form-field appearance="outline">
+        <mat-label>Telefono</mat-label>
+        <input matInput formControlName="telefono" inputmode="numeric" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Rol</mat-label>
+        <mat-select formControlName="rol">
+          <mat-option value="operador">Operador</mat-option>
+          <mat-option value="medico">Medico</mat-option>
+          <mat-option value="admin">Administrador</mat-option>
+          @if (esPaciente()) { <mat-option value="paciente">Paciente</mat-option> }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ edicion ? 'Nueva contrasena (opcional)' : 'Contrasena' }}</mat-label>
+      <input matInput [type]="ocultarPass() ? 'password' : 'text'" formControlName="password" autocomplete="new-password" />
+      <button type="button" mat-icon-button matSuffix (click)="ocultarPass.set(!ocultarPass())">
+        <mat-icon>{{ ocultarPass() ? 'visibility' : 'visibility_off' }}</mat-icon>
+      </button>
+      @if (edicion) { <mat-hint>Dejala vacia para no cambiarla.</mat-hint> }
+    </mat-form-field>
+
+    @if (necesitaSede()) {
+      <mat-form-field appearance="outline">
+        <mat-label>Sede</mat-label>
+        <mat-select formControlName="idSede">
+          @for (s of sedes(); track s.id) { <mat-option [value]="s.id">{{ s.nombre }}</mat-option> }
+        </mat-select>
+      </mat-form-field>
+    }
+
+    @if (esMedico()) {
+      <mat-form-field appearance="outline">
+        <mat-label>Especialidades</mat-label>
+        <mat-select formControlName="especialidades" multiple>
+          @for (e of especialidades(); track e.id) { <mat-option [value]="e.id">{{ e.descripcion }}</mat-option> }
+        </mat-select>
+      </mat-form-field>
+    }
+
+    @if (esPaciente()) {
+      <mat-form-field appearance="outline">
+        <mat-label>Cobertura</mat-label>
+        <mat-select formControlName="idCobertura">
+          @for (c of coberturas(); track c.id) { <mat-option [value]="c.id">{{ c.nombre }}</mat-option> }
+        </mat-select>
+      </mat-form-field>
+    }
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close [disabled]="cargando()">Cancelar</button>
+  <button mat-flat-button (click)="guardar()" [disabled]="cargando()">
+    @if (cargando()) { <mat-spinner diameter="20" /> } @else { Guardar }
+  </button>
+</mat-dialog-actions>

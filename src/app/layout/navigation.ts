@@ -16,15 +16,16 @@ export interface NavItem {
 export const NAV_POR_ROL: Record<Rol, NavItem[]> = {
   paciente: [
     { label: 'Inicio', icon: 'home', ruta: '/' },
-    { label: 'Mi perfil', icon: 'account_circle', ruta: '/perfil' },
     { label: 'Sacar turno', icon: 'event_available', ruta: '/paciente/turnos/nuevo' },
     { label: 'Mis turnos', icon: 'event_note', ruta: '/paciente/turnos' },
+    { label: 'Mis datos', icon: 'badge', ruta: '/paciente/mis-datos' },
   ],
   medico: [
     { label: 'Inicio', icon: 'home', ruta: '/' },
-    { label: 'Mi perfil', icon: 'account_circle', ruta: '/perfil' },
     { label: 'Mi agenda', icon: 'calendar_month', ruta: '/medico/agenda' },
     { label: 'Turnos del dia', icon: 'event', ruta: '/medico/turnos' },
+    { label: 'Historial clinico', icon: 'clinical_notes', ruta: '/medico/historial' },
+    { label: 'Mi perfil', icon: 'account_circle', ruta: '/perfil' },
   ],
   operador: [
     { label: 'Inicio', icon: 'home', ruta: '/' },
@@ -35,11 +36,12 @@ export const NAV_POR_ROL: Record<Rol, NavItem[]> = {
   ],
   admin: [
     { label: 'Inicio', icon: 'home', ruta: '/' },
-    { label: 'Mi perfil', icon: 'account_circle', ruta: '/perfil' },
-    { label: 'Coberturas', icon: 'health_and_safety', ruta: '/admin/coberturas' },
+    { label: 'Usuarios', icon: 'group', ruta: '/admin/usuarios' },
     { label: 'Sedes', icon: 'business', ruta: '/admin/sedes' },
     { label: 'Especialidades', icon: 'medical_services', ruta: '/admin/especialidades' },
+    { label: 'Coberturas', icon: 'health_and_safety', ruta: '/admin/coberturas' },
     { label: 'Reportes', icon: 'bar_chart', ruta: '/admin/reportes' },
     { label: 'Auditoria', icon: 'fact_check', ruta: '/admin/auditoria' },
+    { label: 'Mi perfil', icon: 'account_circle', ruta: '/perfil' },
   ],
 };

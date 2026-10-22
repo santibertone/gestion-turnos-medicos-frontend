@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>{{ data.titulo }}</h2>
+
+<mat-dialog-content>
+  @if (errorBackend(); as error) {
+    <div class="form-error" role="alert">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ error }}</span>
+    </div>
+  }
+
+  <form [formGroup]="form" class="entidad-form" (ngSubmit)="guardar()">
+    @for (campo of data.campos; track campo.nombre) {
+      <mat-form-field appearance="outline">
+        <mat-label>{{ campo.label }}</mat-label>
+        @if (campo.tipo === 'textarea') {
+          <textarea matInput [formControlName]="campo.nombre" rows="3"></textarea>
+        } @else {
+          <input
+            matInput
+            [type]="campo.tipo === 'number' ? 'number' : 'text'"
+            [formControlName]="campo.nombre"
+          />
+        }
+        @if (form.get(campo.nombre)?.hasError('required')) {
+          <mat-error>{{ campo.label }} es obligatorio.</mat-error>
+        }
+      </mat-form-field>
+    }
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close [disabled]="cargando()">Cancelar</button>
+  <button mat-flat-button (click)="guardar()" [disabled]="cargando()">
+    @if (cargando()) {
+      <mat-spinner diameter="20" />
+    } @else {
+      Guardar
+    }
+  </button>
+</mat-dialog-actions>

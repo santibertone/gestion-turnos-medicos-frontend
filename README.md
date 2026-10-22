@@ -1,13 +1,11 @@
 # Clínica Virtual — Frontend (Turnos Médicos)
 
 Frontend del **Sistema de Gestión de Turnos Médicos** (Programación II — Proyecto
-integrador final). Construido en **Angular 21 + Angular Material 21**, consume la
-API del backend del proyecto (repositorio aparte).
+integrador final). **Angular 21 + Angular Material 21**, consume la API del backend
+(repositorio aparte). Aplicación completa para los cuatro roles: **administrador,
+médico, operador y paciente**.
 
-> Entrega **Frontend — Semana 1**: setup, Angular Material, layout general
-> (header, menú y footer), pantalla principal con/sin sesión, registro de
-> pacientes, login, cierre de sesión, "Mi perfil" y rutas protegidas por sesión
-> y por rol.
+> Pensada para usarse en **escritorio** (no requiere diseño responsive).
 
 ---
 
@@ -21,110 +19,125 @@ API del backend del proyecto (repositorio aparte).
 | Angular          | 21.2               |
 | Angular Material | 21.2               |
 | TypeScript       | 5.9                |
+| **Gráficos**     | **ng2-charts 8 + Chart.js 4** |
 
-> Angular 21 requiere Node `^20.19.0`, `^22.12.0` o `^24.0.0`. **No usar Node 25**
-> (impar / no LTS, fuera de soporte). Si tenés otra versión, recomendamos
-> administrar Node con [nvm](https://github.com/nvm-sh/nvm): `nvm install 22 && nvm use 22`.
-
----
-
-## Requisitos previos
-
-1. **Node 22 LTS** y **npm 11** instalados (ver tabla de arriba).
-2. El **backend** del proyecto corriendo en `http://localhost:3000`
-   (repositorio: `gestion-turnos-medicos`). El backend ya tiene **CORS**
-   habilitado para `http://localhost:4200`.
-
-La URL base de la API se define en un único lugar:
-[`src/environments/environment.ts`](src/environments/environment.ts). Si el
-backend corre en otra dirección, cambiá `apiUrl` ahí.
+> Angular 21 requiere Node `^20.19.0`, `^22.12.0` o `^24.0.0`. **No usar Node 25.**
+> Recomendado administrar Node con [nvm](https://github.com/nvm-sh/nvm):
+> `nvm install 22 && nvm use 22`.
 
 ---
 
-## Instalar y levantar
+## Levantar el sistema completo desde cero
+
+### 1) Base de datos (MySQL/MariaDB)
 
 ```bash
-# 1) Instalar dependencias
-npm install
-
-# 2) Levantar el servidor de desarrollo (http://localhost:4200)
-npm start
-# equivalente a: ng serve
+# Crear la base y el esquema, luego los datos de prueba
+mysql -u root -p < backend/db/clinica.sql
+mysql -u root -p clinica < backend/db/seed_demo.sql
 ```
 
-Abrí el navegador en **http://localhost:4200**. La app recarga sola al guardar cambios.
+El `seed_demo.sql` carga datos de prueba con **fechas relativas a hoy** (para que el
+demo funcione cualquier día): 3 médicos (uno con agenda en **dos sedes**),
+especialidades y coberturas variadas, y **turnos en los tres estados**
+(confirmado / cancelado / atendido).
+
+### 2) Backend (repositorio `gestion-turnos-medicos`)
+
+```bash
+cd backend
+# archivo .env (no se versiona) con:
+#   PORT=3000
+#   DB_HOST=localhost
+#   DB_PORT=3306
+#   DB_USER=root
+#   DB_PASSWORD=tu_password
+#   DB_NAME=clinica
+#   JWT_SECRET=una_clave_secreta
+#   JWT_EXPIRES_IN=1d
+npm install
+npm run dev          # http://localhost:3000  (CORS habilitado para :4200)
+```
+
+### 3) Frontend (este repositorio)
+
+```bash
+npm install
+npm start            # http://localhost:4200
+```
+
+Abrí **http://localhost:4200**. La URL base de la API se define en un único lugar:
+[`src/environments/environment.ts`](src/environments/environment.ts).
 
 ### Otros comandos
 
 ```bash
-npm run build   # build de producción (dist/)
-npm test        # tests unitarios
+npm run build        # build de producción (dist/)
+npm test             # tests unitarios
 ```
 
 ---
 
-## Credenciales de prueba
+## Usuarios de prueba (contraseña: `clinica123`)
 
-Los usuarios seed del backend tienen la contraseña **`clinica123`**. Se ingresa
-con **DNI + contraseña**:
+Se ingresa con **DNI + contraseña**.
 
-| Rol         | DNI        | Contraseña   |
-|-------------|------------|--------------|
-| Administrador | `18222333` | `clinica123` |
-| Operador      | `15200548` | `clinica123` |
-| Médico        | `20111222` | `clinica123` |
-| Paciente      | `36000960` | `clinica123` |
+| Rol           | DNI        | Nombre        | Notas                                   |
+|---------------|------------|---------------|-----------------------------------------|
+| Administrador | `18222333` | Marcos Gómez  | ABMs, usuarios, auditoría y reportes     |
+| Operador      | `15200548` | Juan Pérez    | Sede Centro                              |
+| Médico        | `20111222` | Ana López     | Traumatología, agenda en **2 sedes**     |
+| Médico        | `25333444` | Lucas García  | Clínica Médica y Cardiología (Sede Centro) |
+| Médico        | `30555666` | Sofía Martínez| Pediatría (Sede Norte)                   |
+| Paciente      | `36000960` | Franco Friggeri | Tiene turnos en varios estados         |
 
-También podés **registrarte** como paciente nuevo desde la pantalla de registro
-(la cobertura se elige de un listado traído del backend).
-
----
-
-## Estructura del proyecto
-
-```
-src/
-├─ environments/
-│  └─ environment.ts          # URL base de la API (único lugar)
-└─ app/
-   ├─ core/                   # lógica transversal
-   │  ├─ models/              # ApiResponse, Usuario, Cobertura, Auth
-   │  ├─ services/            # AuthService, CoberturaService
-   │  ├─ interceptors/        # auth.interceptor (token Bearer)
-   │  ├─ guards/              # authGuard (sesión), rolGuard (rol)
-   │  └─ utils/               # helper de mensajes de error
-   ├─ layout/                 # header, menú lateral, footer, shell
-   ├─ features/               # pantallas
-   │  ├─ home/                # pantalla principal (con/sin sesión)
-   │  ├─ auth/login/          # login (DNI + contraseña)
-   │  ├─ auth/registro/       # registro de paciente
-   │  ├─ perfil/              # "Mi perfil" (GET /auth/perfil)
-   │  └─ errores/             # En construcción / Acceso denegado / No encontrada
-   ├─ app.routes.ts           # rutas + guards por sesión y por rol
-   └─ app.config.ts           # providers (router, HTTP + interceptor, animaciones)
-```
-
-### Rutas y acceso
-
-- **Públicas:** `/` (inicio), `/login`, `/registro`.
-- **Con sesión:** `/perfil`.
-- **Por rol:** `/admin/...`, `/medico/...`, `/operador/...`, `/paciente/...`.
-  - Sin sesión → redirige a `/login`.
-  - Rol no permitido → `/acceso-denegado`.
-- Ruta inexistente → página **No encontrada** (`**`).
-
-La sesión se guarda en `localStorage` (token JWT) y se mantiene al recargar.
-El token se envía automáticamente a los endpoints protegidos vía interceptor.
+También podés **registrarte** como paciente nuevo desde la pantalla de registro.
 
 ---
 
-## Endpoints consumidos (Semana 1)
+## Funcionalidades por rol
 
-| Método | Endpoint         | Uso                              |
-|--------|------------------|----------------------------------|
-| POST   | `/auth/registro` | Alta de paciente                 |
-| POST   | `/auth/login`    | Inicio de sesión (devuelve JWT)  |
-| GET    | `/auth/perfil`   | Datos del usuario logueado       |
-| GET    | `/coberturas`    | Listado para el registro         |
+- **Administrador:** ABM de sedes, especialidades y coberturas; gestión de usuarios
+  (alta de operador/médico/admin + edición de cualquiera, con especialidades del
+  médico); auditoría (solo lectura, con filtros); dashboard de reportes con gráficos.
+- **Médico:** su agenda (alta/edición/baja de rangos por fecha, en una o más sedes);
+  turnos programados (atender → carga de historial, cancelar, ver notas); historial
+  clínico de los pacientes que atendió.
+- **Operador:** agenda y turnos por sede (sólo modifica su sede, consulta el resto);
+  alta de pacientes; asignar turnos a un paciente.
+- **Paciente:** sacar turno (paso a paso), mis turnos (con estado, cancelación e
+  historial si fue atendido), mis datos (edita email, contraseña, teléfono y cobertura).
+- **Todos:** campana de notificaciones con contador en vivo.
 
-El backend responde siempre con la estructura uniforme `{ codigo, estado, datos }`.
+---
+
+## Detalles técnicos
+
+- **Sesión:** token JWT en `localStorage` (persiste al recargar); se envía
+  automáticamente a los endpoints protegidos vía interceptor. Si el token vence, la
+  app lleva al login.
+- **Rutas por rol:** `/admin/...`, `/medico/...`, `/operador/...`, `/paciente/...`,
+  protegidas por sesión y por rol (desde el menú y escribiendo la URL a mano).
+- **Reutilización:** el formulario de alta de paciente y el wizard de turno se
+  comparten entre roles (no hay pantallas duplicadas).
+- **Fechas:** se muestran en formato local `dd/MM/yyyy` (locale `es-AR`).
+- **UX:** indicadores de carga, estados vacíos, confirmación antes de las bajas y
+  mensajes claros de los errores del backend.
+
+---
+
+## Estructura
+
+```
+src/app/
+├─ core/            # models, services, guards, interceptors, utils
+├─ shared/          # confirmar, cargando, sin-datos, formularios y wizard reutilizables
+├─ layout/          # header (con notificaciones), menú por rol, footer
+└─ features/
+   ├─ auth/         # login, registro
+   ├─ home, perfil, errores
+   ├─ admin/        # sedes, especialidades, coberturas, usuarios, auditoria, reportes
+   ├─ medico/       # agenda, turnos, historial
+   ├─ operador/     # agenda, pacientes, turnos
+   └─ paciente/     # nuevo-turno, mis-turnos, mis-datos
+```

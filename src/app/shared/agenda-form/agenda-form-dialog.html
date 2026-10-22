@@ -1,0 +1,71 @@
+<h2 mat-dialog-title>{{ edicion ? 'Editar rango horario' : 'Nuevo rango horario' }}</h2>
+
+<mat-dialog-content>
+  @if (error(); as e) {
+    <div class="form-aviso-error" role="alert">
+      <mat-icon>error_outline</mat-icon><span>{{ e }}</span>
+    </div>
+  }
+
+  <form [formGroup]="form" class="form-grid" (ngSubmit)="guardar()">
+    @if (esOperador) {
+      <mat-form-field appearance="outline">
+        <mat-label>Medico</mat-label>
+        <mat-select formControlName="idMedico">
+          @for (m of medicos; track m.id) {
+            <mat-option [value]="m.id">{{ m.apellido }}, {{ m.nombre }}</mat-option>
+          }
+        </mat-select>
+        @if (form.controls.idMedico.hasError('required')) { <mat-error>Elegi un medico.</mat-error> }
+      </mat-form-field>
+    }
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha</mat-label>
+      <input matInput [matDatepicker]="dp" formControlName="fecha" readonly />
+      <mat-datepicker-toggle matIconSuffix [for]="dp" />
+      <mat-datepicker #dp />
+      @if (form.controls.fecha.hasError('required')) { <mat-error>Obligatoria.</mat-error> }
+    </mat-form-field>
+
+    <div class="form-fila">
+      <mat-form-field appearance="outline">
+        <mat-label>Hora de entrada</mat-label>
+        <input matInput type="time" formControlName="horaEntrada" />
+        @if (form.controls.horaEntrada.hasError('required')) { <mat-error>Obligatoria.</mat-error> }
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Hora de salida</mat-label>
+        <input matInput type="time" formControlName="horaSalida" />
+        @if (form.controls.horaSalida.hasError('required')) { <mat-error>Obligatoria.</mat-error> }
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Especialidad</mat-label>
+      <mat-select formControlName="idEspecialidad">
+        @for (e of especialidades(); track e.id) {
+          <mat-option [value]="e.id">{{ e.descripcion }}</mat-option>
+        }
+      </mat-select>
+      @if (form.controls.idEspecialidad.hasError('required')) { <mat-error>Elegi una especialidad.</mat-error> }
+    </mat-form-field>
+
+    @if (!esOperador) {
+      <mat-form-field appearance="outline">
+        <mat-label>Sede</mat-label>
+        <mat-select formControlName="idSede">
+          @for (s of sedes; track s.id) { <mat-option [value]="s.id">{{ s.nombre }}</mat-option> }
+        </mat-select>
+        @if (form.controls.idSede.hasError('required')) { <mat-error>Elegi una sede.</mat-error> }
+      </mat-form-field>
+    }
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close [disabled]="cargando()">Cancelar</button>
+  <button mat-flat-button (click)="guardar()" [disabled]="cargando()">
+    @if (cargando()) { <mat-spinner diameter="20" /> } @else { Guardar }
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,92 @@
+<div class="pagina">
+  <div class="pagina__header">
+    <h1 class="pagina__titulo"><mat-icon>bar_chart</mat-icon> Reportes y estadisticas</h1>
+  </div>
+
+  <div class="barra-filtros">
+    <mat-form-field appearance="outline">
+      <mat-label>Desde</mat-label>
+      <input matInput [matDatepicker]="dp1" [value]="desde()" (dateChange)="desde.set($event.value)" readonly />
+      <mat-datepicker-toggle matIconSuffix [for]="dp1" />
+      <mat-datepicker #dp1 />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Hasta</mat-label>
+      <input matInput [matDatepicker]="dp2" [value]="hasta()" (dateChange)="hasta.set($event.value)" readonly />
+      <mat-datepicker-toggle matIconSuffix [for]="dp2" />
+      <mat-datepicker #dp2 />
+    </mat-form-field>
+    <button mat-flat-button (click)="cargar()">
+      <mat-icon>filter_alt</mat-icon> Aplicar
+    </button>
+    <button mat-stroked-button (click)="limpiar()">Limpiar</button>
+  </div>
+
+  @if (cargando()) {
+    <app-cargando />
+  } @else {
+    <!-- Tarjetas resumen de la tasa de cancelacion -->
+    @if (tasa(); as t) {
+      <div class="cards-resumen">
+        <mat-card appearance="outlined" class="card-kpi">
+          <p class="card-kpi__valor">{{ t.total_turnos }}</p>
+          <p class="card-kpi__label">Turnos totales</p>
+        </mat-card>
+        <mat-card appearance="outlined" class="card-kpi">
+          <p class="card-kpi__valor">{{ t.cancelados }}</p>
+          <p class="card-kpi__label">Cancelados</p>
+        </mat-card>
+        <mat-card appearance="outlined" class="card-kpi card-kpi--destacado">
+          <p class="card-kpi__valor">{{ t.porcentaje }}</p>
+          <p class="card-kpi__label">Tasa de cancelacion</p>
+        </mat-card>
+      </div>
+    }
+
+    <div class="grid-reportes">
+      <mat-card appearance="outlined" class="grafico-card">
+        <mat-card-header><mat-card-title>Turnos por especialidad</mat-card-title></mat-card-header>
+        <mat-card-content>
+          @if (porEspecialidad().length) {
+            <div class="grafico"><canvas baseChart type="bar" [data]="barData()" [options]="opciones"></canvas></div>
+          } @else {
+            <app-sin-datos mensaje="Sin turnos en el periodo." icono="bar_chart" />
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="grafico-card">
+        <mat-card-header><mat-card-title>Turnos por sede</mat-card-title></mat-card-header>
+        <mat-card-content>
+          @if (porSede().length) {
+            <div class="grafico"><canvas baseChart type="doughnut" [data]="pieData()" [options]="opcionesTorta"></canvas></div>
+          } @else {
+            <app-sin-datos mensaje="Sin turnos en el periodo." icono="pie_chart" />
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="grafico-card grafico-card--ancho">
+        <mat-card-header><mat-card-title>Ranking de medicos (turnos atendidos)</mat-card-title></mat-card-header>
+        <mat-card-content>
+          @if (ranking().length) {
+            <table mat-table [dataSource]="ranking()" class="tabla">
+              <ng-container matColumnDef="medico">
+                <th mat-header-cell *matHeaderCellDef>Medico</th>
+                <td mat-cell *matCellDef="let r">{{ r.medico }}</td>
+              </ng-container>
+              <ng-container matColumnDef="turnos">
+                <th mat-header-cell *matHeaderCellDef>Turnos atendidos</th>
+                <td mat-cell *matCellDef="let r">{{ r.turnos_atendidos }}</td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="columnasRanking"></tr>
+              <tr mat-row *matRowDef="let row; columns: columnasRanking"></tr>
+            </table>
+          } @else {
+            <app-sin-datos mensaje="Sin medicos con turnos atendidos en el periodo." icono="leaderboard" />
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>

@@ -30,11 +30,41 @@
       <button
         mat-icon-button
         aria-label="Notificaciones"
-        matTooltip="Notificaciones (disponible en la semana 3)"
-        disabled
+        matTooltip="Notificaciones"
+        [matMenuTriggerFor]="notifMenu"
+        (menuOpened)="abrirNotificaciones()"
       >
-        <mat-icon matBadge="•" matBadgeColor="warn" matBadgeSize="small">notifications</mat-icon>
+        @if (noLeidas() > 0) {
+          <mat-icon [matBadge]="noLeidas()" matBadgeColor="warn" matBadgeSize="small">
+            notifications
+          </mat-icon>
+        } @else {
+          <mat-icon>notifications</mat-icon>
+        }
       </button>
+      <mat-menu #notifMenu="matMenu" class="notif-menu">
+        <div class="notif" (click)="$event.stopPropagation()">
+          <p class="notif__titulo">Notificaciones</p>
+          @if (cargandoNotif()) {
+            <p class="notif__vacio">Cargando...</p>
+          } @else if (notificaciones().length === 0) {
+            <p class="notif__vacio">No tenes notificaciones.</p>
+          } @else {
+            <ul class="notif__lista">
+              @for (n of notificaciones(); track n.id) {
+                <li
+                  class="notif__item"
+                  [class.notif__item--no-leida]="!n.leida"
+                  (click)="marcarLeida(n)"
+                >
+                  <span class="notif__mensaje">{{ n.mensaje }}</span>
+                  <span class="notif__fecha">{{ n.fecha | date: 'dd/MM/yyyy HH:mm' }}</span>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      </mat-menu>
 
       <span class="header__usuario">
         {{ usuario()?.nombre }} {{ usuario()?.apellido }}

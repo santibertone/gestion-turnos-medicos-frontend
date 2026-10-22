@@ -1,0 +1,60 @@
+<div class="pagina">
+  <div class="pagina__header">
+    <h1 class="pagina__titulo"><mat-icon>clinical_notes</mat-icon> Historial clinico</h1>
+  </div>
+
+  <div class="barra-filtros">
+    <mat-form-field appearance="outline">
+      <mat-label>Buscar paciente (DNI o apellido)</mat-label>
+      <input matInput #b (input)="busqueda.set(b.value)" (keyup.enter)="buscar()" />
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+    <button mat-flat-button (click)="buscar()"><mat-icon>search</mat-icon> Buscar</button>
+  </div>
+
+  @if (buscando()) {
+    <app-cargando />
+  } @else if (busquedaHecha() && pacientes().length === 0) {
+    <app-sin-datos mensaje="No se encontraron pacientes." icono="person_search" />
+  } @else if (pacientes().length > 0 && !pacienteSel()) {
+    <mat-card appearance="outlined">
+      <mat-nav-list>
+        @for (p of pacientes(); track p.id) {
+          <a mat-list-item (click)="seleccionar(p)">
+            <mat-icon matListItemIcon>person</mat-icon>
+            <span matListItemTitle>{{ p.apellido }}, {{ p.nombre }}</span>
+            <span matListItemLine>DNI {{ p.dni }}</span>
+          </a>
+        }
+      </mat-nav-list>
+    </mat-card>
+  }
+
+  @if (pacienteSel(); as p) {
+    <div class="paciente-sel">
+      <button mat-stroked-button (click)="pacienteSel.set(null)">
+        <mat-icon>arrow_back</mat-icon> Volver a la busqueda
+      </button>
+      <h2>{{ p.apellido }}, {{ p.nombre }} <small>— DNI {{ p.dni }}</small></h2>
+    </div>
+
+    @if (cargandoHistorial()) {
+      <app-cargando />
+    } @else if (historial().length === 0) {
+      <app-sin-datos mensaje="No tenes registros de historial para este paciente." icono="note_alt" />
+    } @else {
+      @for (h of historial(); track h.id) {
+        <mat-card appearance="outlined" class="historial-card">
+          <mat-card-header>
+            <mat-card-title>{{ h.turno_fecha | date: 'dd/MM/yyyy' }} - {{ h.turno_hora }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p><strong>Diagnostico:</strong> {{ h.diagnostico }}</p>
+            @if (h.tratamiento) { <p><strong>Tratamiento:</strong> {{ h.tratamiento }}</p> }
+            @if (h.observaciones) { <p><strong>Observaciones:</strong> {{ h.observaciones }}</p> }
+          </mat-card-content>
+        </mat-card>
+      }
+    }
+  }
+</div>

@@ -1,0 +1,49 @@
+.cards-resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.card-kpi {
+  text-align: center;
+  padding: 1.25rem;
+
+  &__valor {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--mat-sys-primary);
+  }
+
+  &__label {
+    margin: 0.25rem 0 0;
+    color: var(--mat-sys-on-surface-variant);
+    font-size: 0.9rem;
+  }
+
+  &--destacado {
+    background-color: var(--mat-sys-primary-container);
+
+    .card-kpi__valor {
+      color: var(--mat-sys-on-primary-container);
+    }
+  }
+}
+
+.grid-reportes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.grafico-card {
+  &--ancho {
+    grid-column: 1 / -1;
+  }
+}
+
+.grafico {
+  position: relative;
+  height: 280px;
+}
