@@ -22,9 +22,10 @@ export const NAV_POR_ROL: Record<Rol, NavItem[]> = {
   ],
   medico: [
     { label: 'Inicio', icon: 'home', ruta: '/' },
-    { label: 'Mi perfil', icon: 'account_circle', ruta: '/perfil' },
     { label: 'Mi agenda', icon: 'calendar_month', ruta: '/medico/agenda' },
     { label: 'Turnos del dia', icon: 'event', ruta: '/medico/turnos' },
+    { label: 'Historial clinico', icon: 'clinical_notes', ruta: '/medico/historial' },
+    { label: 'Mi perfil', icon: 'account_circle', ruta: '/perfil' },
   ],
   operador: [
     { label: 'Inicio', icon: 'home', ruta: '/' },

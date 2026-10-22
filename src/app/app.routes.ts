@@ -61,15 +61,16 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'agenda' },
       {
         path: 'agenda',
-        data: { titulo: 'Mi agenda' },
-        loadComponent: () =>
-          import('./features/errores/en-construccion').then((m) => m.EnConstruccion),
+        loadComponent: () => import('./features/medico/agenda/agenda').then((m) => m.MedicoAgenda),
       },
       {
         path: 'turnos',
-        data: { titulo: 'Turnos del dia' },
+        loadComponent: () => import('./features/medico/turnos/turnos').then((m) => m.MedicoTurnos),
+      },
+      {
+        path: 'historial',
         loadComponent: () =>
-          import('./features/errores/en-construccion').then((m) => m.EnConstruccion),
+          import('./features/medico/historial/historial').then((m) => m.MedicoHistorial),
       },
     ],
   },
