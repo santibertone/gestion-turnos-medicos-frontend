@@ -108,36 +108,32 @@ export const routes: Routes = [
     canActivate: [rolGuard],
     data: { roles: ['admin'] },
     children: [
-      { path: '', pathMatch: 'full', redirectTo: 'coberturas' },
+      { path: '', pathMatch: 'full', redirectTo: 'usuarios' },
       {
-        path: 'coberturas',
-        data: { titulo: 'Coberturas' },
-        loadComponent: () =>
-          import('./features/errores/en-construccion').then((m) => m.EnConstruccion),
+        path: 'usuarios',
+        loadComponent: () => import('./features/admin/usuarios/usuarios').then((m) => m.Usuarios),
       },
       {
         path: 'sedes',
-        data: { titulo: 'Sedes' },
-        loadComponent: () =>
-          import('./features/errores/en-construccion').then((m) => m.EnConstruccion),
+        loadComponent: () => import('./features/admin/sedes/sedes').then((m) => m.Sedes),
       },
       {
         path: 'especialidades',
-        data: { titulo: 'Especialidades' },
         loadComponent: () =>
-          import('./features/errores/en-construccion').then((m) => m.EnConstruccion),
+          import('./features/admin/especialidades/especialidades').then((m) => m.Especialidades),
+      },
+      {
+        path: 'coberturas',
+        loadComponent: () =>
+          import('./features/admin/coberturas/coberturas').then((m) => m.Coberturas),
       },
       {
         path: 'reportes',
-        data: { titulo: 'Reportes' },
-        loadComponent: () =>
-          import('./features/errores/en-construccion').then((m) => m.EnConstruccion),
+        loadComponent: () => import('./features/admin/reportes/reportes').then((m) => m.Reportes),
       },
       {
         path: 'auditoria',
-        data: { titulo: 'Auditoria' },
-        loadComponent: () =>
-          import('./features/errores/en-construccion').then((m) => m.EnConstruccion),
+        loadComponent: () => import('./features/admin/auditoria/auditoria').then((m) => m.Auditoria),
       },
     ],
   },

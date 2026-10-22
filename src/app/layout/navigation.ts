@@ -35,11 +35,12 @@ export const NAV_POR_ROL: Record<Rol, NavItem[]> = {
   ],
   admin: [
     { label: 'Inicio', icon: 'home', ruta: '/' },
-    { label: 'Mi perfil', icon: 'account_circle', ruta: '/perfil' },
-    { label: 'Coberturas', icon: 'health_and_safety', ruta: '/admin/coberturas' },
+    { label: 'Usuarios', icon: 'group', ruta: '/admin/usuarios' },
     { label: 'Sedes', icon: 'business', ruta: '/admin/sedes' },
     { label: 'Especialidades', icon: 'medical_services', ruta: '/admin/especialidades' },
+    { label: 'Coberturas', icon: 'health_and_safety', ruta: '/admin/coberturas' },
     { label: 'Reportes', icon: 'bar_chart', ruta: '/admin/reportes' },
     { label: 'Auditoria', icon: 'fact_check', ruta: '/admin/auditoria' },
+    { label: 'Mi perfil', icon: 'account_circle', ruta: '/perfil' },
   ],
 };

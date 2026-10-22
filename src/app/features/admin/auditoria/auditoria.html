@@ -1,0 +1,83 @@
+<div class="pagina">
+  <div class="pagina__header">
+    <h1 class="pagina__titulo"><mat-icon>fact_check</mat-icon> Auditoria</h1>
+  </div>
+
+  <div class="barra-filtros">
+    <mat-form-field appearance="outline">
+      <mat-label>Usuario</mat-label>
+      <input matInput #t (input)="texto.set(t.value)" placeholder="Nombre o apellido" />
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Entidad</mat-label>
+      <mat-select [value]="entidad()" (valueChange)="entidad.set($event)">
+        <mat-option value="">Todas</mat-option>
+        @for (e of entidades; track e) {
+          <mat-option [value]="e">{{ e }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Desde</mat-label>
+      <input matInput [matDatepicker]="dp1" [value]="desde()" (dateChange)="desde.set($event.value)" readonly />
+      <mat-datepicker-toggle matIconSuffix [for]="dp1" />
+      <mat-datepicker #dp1 />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hasta</mat-label>
+      <input matInput [matDatepicker]="dp2" [value]="hasta()" (dateChange)="hasta.set($event.value)" readonly />
+      <mat-datepicker-toggle matIconSuffix [for]="dp2" />
+      <mat-datepicker #dp2 />
+    </mat-form-field>
+
+    <button mat-flat-button (click)="cargar()">
+      <mat-icon>filter_alt</mat-icon> Filtrar
+    </button>
+    <button mat-stroked-button (click)="limpiar()">Limpiar</button>
+  </div>
+
+  @if (cargando()) {
+    <app-cargando />
+  } @else if (filtrados().length === 0) {
+    <app-sin-datos mensaje="No hay registros de auditoria para estos filtros." icono="fact_check" />
+  } @else {
+    <mat-card class="tabla-card" appearance="outlined">
+      <div class="tabla-wrap">
+        <table mat-table [dataSource]="pagados()" class="tabla">
+          <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef>Fecha</th>
+            <td mat-cell *matCellDef="let r">{{ r.fecha }}</td>
+          </ng-container>
+          <ng-container matColumnDef="usuario">
+            <th mat-header-cell *matHeaderCellDef>Usuario</th>
+            <td mat-cell *matCellDef="let r">{{ r.usuario }}</td>
+          </ng-container>
+          <ng-container matColumnDef="accion">
+            <th mat-header-cell *matHeaderCellDef>Accion</th>
+            <td mat-cell *matCellDef="let r">{{ r.accion }}</td>
+          </ng-container>
+          <ng-container matColumnDef="entidad">
+            <th mat-header-cell *matHeaderCellDef>Entidad</th>
+            <td mat-cell *matCellDef="let r">{{ r.entidad }}</td>
+          </ng-container>
+          <ng-container matColumnDef="detalle">
+            <th mat-header-cell *matHeaderCellDef>Detalle</th>
+            <td mat-cell *matCellDef="let r">{{ r.detalle }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+        </table>
+      </div>
+      <mat-paginator
+        [length]="filtrados().length"
+        [pageSize]="tamano()"
+        [pageSizeOptions]="[10, 25, 50]"
+        (page)="paginar($event)"
+      />
+    </mat-card>
+  }
+</div>
