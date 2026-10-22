@@ -16,4 +16,16 @@ export class CoberturaService {
   listar(): Observable<ApiResponse<Cobertura[]>> {
     return this.http.get<ApiResponse<Cobertura[]>>(this.baseUrl);
   }
+
+  crear(cobertura: Omit<Cobertura, 'id'>): Observable<ApiResponse<Cobertura>> {
+    return this.http.post<ApiResponse<Cobertura>>(this.baseUrl, cobertura);
+  }
+
+  modificar(id: number, cobertura: Omit<Cobertura, 'id'>): Observable<ApiResponse<Cobertura>> {
+    return this.http.put<ApiResponse<Cobertura>>(`${this.baseUrl}/${id}`, cobertura);
+  }
+
+  eliminar(id: number): Observable<ApiResponse<unknown>> {
+    return this.http.delete<ApiResponse<unknown>>(`${this.baseUrl}/${id}`);
+  }
 }

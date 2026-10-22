@@ -71,6 +71,65 @@
   }
 }
 
+// --- Menu de notificaciones (campana) --------------------------------------
+.notif {
+  width: 340px;
+  max-width: 90vw;
+
+  &__titulo {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+  }
+
+  &__vacio {
+    margin: 0;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  &__lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 360px;
+    overflow-y: auto;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.7rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+
+    &:hover {
+      background-color: var(--mat-sys-surface-container-high);
+    }
+
+    &--no-leida {
+      background-color: var(--mat-sys-primary-container);
+
+      .notif__mensaje {
+        font-weight: 500;
+      }
+    }
+  }
+
+  &__mensaje {
+    font-size: 0.9rem;
+    line-height: 1.3;
+  }
+
+  &__fecha {
+    font-size: 0.75rem;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
 // En pantallas chicas ocultamos textos largos para no romper la barra.
 @media (max-width: 640px) {
   .header__marca-texto,
