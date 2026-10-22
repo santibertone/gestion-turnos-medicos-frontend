@@ -1,0 +1,72 @@
+<div class="pagina">
+  <div class="pagina__header">
+    <h1 class="pagina__titulo"><mat-icon>badge</mat-icon> Mis datos personales</h1>
+  </div>
+
+  @if (cargando()) {
+    <app-cargando />
+  } @else if (usuario(); as u) {
+    <mat-card appearance="outlined" class="form-card">
+      <mat-card-content>
+        @if (error(); as e) {
+          <div class="form-aviso-error" role="alert"><mat-icon>error_outline</mat-icon><span>{{ e }}</span></div>
+        }
+
+        <!-- Datos de solo lectura -->
+        <div class="datos-lectura">
+          <div><span class="datos-lectura__label">Nombre</span><span>{{ u.nombre }} {{ u.apellido }}</span></div>
+          <div><span class="datos-lectura__label">DNI</span><span>{{ u.dni }}</span></div>
+          <div><span class="datos-lectura__label">Fecha de nacimiento</span><span>{{ u.fecha_nacimiento | date: 'dd/MM/yyyy' }}</span></div>
+        </div>
+
+        <h3 class="datos-titulo">Datos editables</h3>
+        <form [formGroup]="form" class="form-grid" (ngSubmit)="guardar()">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" />
+            @if (form.controls.email.hasError('required')) { <mat-error>Obligatorio.</mat-error> }
+            @else if (form.controls.email.hasError('email')) { <mat-error>Email invalido.</mat-error> }
+          </mat-form-field>
+
+          <div class="form-fila">
+            <mat-form-field appearance="outline">
+              <mat-label>Telefono</mat-label>
+              <input matInput formControlName="telefono" inputmode="numeric" />
+              @if (form.controls.telefono.hasError('required')) { <mat-error>Obligatorio.</mat-error> }
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Cobertura</mat-label>
+              <mat-select formControlName="idCobertura">
+                @for (c of coberturas(); track c.id) { <mat-option [value]="c.id">{{ c.nombre }}</mat-option> }
+              </mat-select>
+              @if (form.controls.idCobertura.hasError('required')) { <mat-error>Elegi una cobertura.</mat-error> }
+            </mat-form-field>
+          </div>
+
+          <div class="form-fila">
+            <mat-form-field appearance="outline">
+              <mat-label>Nueva contrasena (opcional)</mat-label>
+              <input matInput [type]="ocultarPass() ? 'password' : 'text'" formControlName="password" autocomplete="new-password" />
+              <button type="button" mat-icon-button matSuffix (click)="ocultarPass.set(!ocultarPass())">
+                <mat-icon>{{ ocultarPass() ? 'visibility' : 'visibility_off' }}</mat-icon>
+              </button>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Repetir contrasena</mat-label>
+              <input matInput [type]="ocultarPass() ? 'password' : 'text'" formControlName="passwordRepetir" autocomplete="new-password" />
+              @if (form.hasError('noCoincide')) { <mat-error>No coinciden.</mat-error> }
+            </mat-form-field>
+          </div>
+
+          <div class="acciones-form">
+            <button mat-flat-button (click)="guardar()" [disabled]="guardando()">
+              @if (guardando()) { <mat-spinner diameter="20" /> } @else {
+                <span><mat-icon>save</mat-icon> Guardar cambios</span>
+              }
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

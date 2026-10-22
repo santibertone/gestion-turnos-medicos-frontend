@@ -39,15 +39,18 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'turnos' },
       {
         path: 'turnos',
-        data: { titulo: 'Mis turnos' },
         loadComponent: () =>
-          import('./features/errores/en-construccion').then((m) => m.EnConstruccion),
+          import('./features/paciente/mis-turnos/mis-turnos').then((m) => m.MisTurnos),
       },
       {
         path: 'turnos/nuevo',
-        data: { titulo: 'Sacar turno' },
         loadComponent: () =>
-          import('./features/errores/en-construccion').then((m) => m.EnConstruccion),
+          import('./features/paciente/nuevo-turno/nuevo-turno').then((m) => m.NuevoTurno),
+      },
+      {
+        path: 'mis-datos',
+        loadComponent: () =>
+          import('./features/paciente/mis-datos/mis-datos').then((m) => m.MisDatos),
       },
     ],
   },
@@ -84,21 +87,16 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'agenda' },
       {
         path: 'agenda',
-        data: { titulo: 'Agenda medica' },
-        loadComponent: () =>
-          import('./features/errores/en-construccion').then((m) => m.EnConstruccion),
+        loadComponent: () => import('./features/operador/agenda/agenda').then((m) => m.OperadorAgenda),
       },
       {
         path: 'turnos',
-        data: { titulo: 'Turnos' },
-        loadComponent: () =>
-          import('./features/errores/en-construccion').then((m) => m.EnConstruccion),
+        loadComponent: () => import('./features/operador/turnos/turnos').then((m) => m.OperadorTurnos),
       },
       {
         path: 'pacientes',
-        data: { titulo: 'Pacientes' },
         loadComponent: () =>
-          import('./features/errores/en-construccion').then((m) => m.EnConstruccion),
+          import('./features/operador/pacientes/pacientes').then((m) => m.OperadorPacientes),
       },
     ],
   },

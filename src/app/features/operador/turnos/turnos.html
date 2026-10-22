@@ -1,0 +1,47 @@
+<div class="pagina">
+  <div class="pagina__header">
+    <h1 class="pagina__titulo"><mat-icon>event_available</mat-icon> Asignar turno</h1>
+  </div>
+
+  @if (!pacienteSel()) {
+    <div class="barra-filtros">
+      <mat-form-field appearance="outline">
+        <mat-label>Buscar paciente (DNI o apellido)</mat-label>
+        <input matInput #b (input)="busqueda.set(b.value)" (keyup.enter)="buscar()" />
+        <mat-icon matPrefix>search</mat-icon>
+      </mat-form-field>
+      <button mat-flat-button (click)="buscar()"><mat-icon>search</mat-icon> Buscar</button>
+    </div>
+
+    @if (buscando()) {
+      <app-cargando />
+    } @else if (busquedaHecha() && pacientes().length === 0) {
+      <app-sin-datos mensaje="No se encontraron pacientes." icono="person_search" />
+    } @else if (pacientes().length > 0) {
+      <mat-card appearance="outlined">
+        <mat-nav-list>
+          @for (p of pacientes(); track p.id) {
+            <a mat-list-item (click)="seleccionar(p)">
+              <mat-icon matListItemIcon>person</mat-icon>
+              <span matListItemTitle>{{ p.apellido }}, {{ p.nombre }}</span>
+              <span matListItemLine>DNI {{ p.dni }} — {{ p.cobertura || 'Sin cobertura' }}</span>
+            </a>
+          }
+        </mat-nav-list>
+      </mat-card>
+    }
+  } @else {
+    <div class="paciente-sel">
+      <button mat-stroked-button (click)="volver()">
+        <mat-icon>arrow_back</mat-icon> Cambiar paciente
+      </button>
+      <h2>{{ pacienteSel()!.apellido }}, {{ pacienteSel()!.nombre }}</h2>
+    </div>
+    <app-turno-wizard
+      [idPaciente]="pacienteSel()!.id"
+      [sedeFija]="miSede"
+      [coberturaNombre]="pacienteSel()!.cobertura || undefined"
+      (creado)="onCreado()"
+    />
+  }
+</div>

@@ -1,0 +1,141 @@
+@if (exito()) {
+  <div class="wizard-exito">
+    <mat-icon>check_circle</mat-icon>
+    <h2>Turno confirmado</h2>
+    <p>El turno quedo registrado correctamente.</p>
+  </div>
+} @else {
+  <mat-stepper #stepper orientation="horizontal" class="wizard">
+    <!-- 1. Especialidad -->
+    <mat-step>
+      <ng-template matStepLabel>Especialidad</ng-template>
+      <div class="wizard__opciones">
+        <mat-button-toggle-group [value]="idEspecialidad()" (change)="elegirEspecialidad($event.value)" vertical>
+          @for (e of especialidades(); track e.id) {
+            <mat-button-toggle [value]="e.id">{{ e.descripcion }}</mat-button-toggle>
+          }
+        </mat-button-toggle-group>
+      </div>
+      <div class="wizard__acciones">
+        <button mat-flat-button matStepperNext [disabled]="!idEspecialidad()">Siguiente</button>
+      </div>
+    </mat-step>
+
+    <!-- 2. Sede -->
+    <mat-step>
+      <ng-template matStepLabel>Sede</ng-template>
+      @if (sedeFija()) {
+        <p class="wizard__fijo">Sede: <strong>{{ nombreSede() }}</strong></p>
+      } @else {
+        <div class="wizard__opciones">
+          <mat-button-toggle-group [value]="idSede()" (change)="elegirSede($event.value)" vertical>
+            @for (s of sedes(); track s.id) {
+              <mat-button-toggle [value]="s.id">{{ s.nombre }}</mat-button-toggle>
+            }
+          </mat-button-toggle-group>
+        </div>
+      }
+      <div class="wizard__acciones">
+        <button mat-button matStepperPrevious>Atras</button>
+        <button mat-flat-button matStepperNext [disabled]="!idSede()" (click)="cargarMedicos()">Siguiente</button>
+      </div>
+    </mat-step>
+
+    <!-- 3. Medico -->
+    <mat-step>
+      <ng-template matStepLabel>Medico</ng-template>
+      @if (cargandoMedicos()) {
+        <app-cargando />
+      } @else if (medicos().length === 0) {
+        <app-sin-datos mensaje="No hay medicos con agenda para esa especialidad y sede." icono="person_off" />
+      } @else {
+        <div class="wizard__opciones">
+          <mat-button-toggle-group [value]="idMedico()" (change)="elegirMedico($event.value)" vertical>
+            @for (m of medicos(); track m.id) {
+              <mat-button-toggle [value]="m.id">{{ m.apellido }}, {{ m.nombre }}</mat-button-toggle>
+            }
+          </mat-button-toggle-group>
+        </div>
+      }
+      <div class="wizard__acciones">
+        <button mat-button matStepperPrevious>Atras</button>
+        <button mat-flat-button matStepperNext [disabled]="!idMedico()">Siguiente</button>
+      </div>
+    </mat-step>
+
+    <!-- 4. Fecha -->
+    <mat-step>
+      <ng-template matStepLabel>Fecha</ng-template>
+      @if (cargandoFechas()) {
+        <app-cargando />
+      } @else if (fechas().length === 0) {
+        <app-sin-datos mensaje="El medico no tiene fechas con agenda disponibles." icono="event_busy" />
+      } @else {
+        <div class="wizard__opciones">
+          <mat-button-toggle-group [value]="fecha()" (change)="elegirFecha($event.value)">
+            @for (f of fechas(); track f) {
+              <mat-button-toggle [value]="f">{{ f | date: 'dd/MM/yyyy' }}</mat-button-toggle>
+            }
+          </mat-button-toggle-group>
+        </div>
+      }
+      <div class="wizard__acciones">
+        <button mat-button matStepperPrevious>Atras</button>
+        <button mat-flat-button matStepperNext [disabled]="!fecha()">Siguiente</button>
+      </div>
+    </mat-step>
+
+    <!-- 5. Horario -->
+    <mat-step>
+      <ng-template matStepLabel>Horario</ng-template>
+      @if (cargandoHorarios()) {
+        <app-cargando />
+      } @else if (horarios().length === 0) {
+        <app-sin-datos mensaje="No hay horarios libres para esa fecha." icono="schedule" />
+      } @else {
+        <div class="wizard__opciones wizard__opciones--grilla">
+          <mat-button-toggle-group [value]="hora()" (change)="hora.set($event.value)">
+            @for (h of horarios(); track h) {
+              <mat-button-toggle [value]="h">{{ h }}</mat-button-toggle>
+            }
+          </mat-button-toggle-group>
+        </div>
+      }
+      <div class="wizard__acciones">
+        <button mat-button matStepperPrevious>Atras</button>
+        <button mat-flat-button matStepperNext [disabled]="!hora()">Siguiente</button>
+      </div>
+    </mat-step>
+
+    <!-- 6. Nota y confirmacion -->
+    <mat-step>
+      <ng-template matStepLabel>Confirmar</ng-template>
+      @if (error(); as e) {
+        <div class="form-aviso-error" role="alert"><mat-icon>error_outline</mat-icon><span>{{ e }}</span></div>
+      }
+      <mat-form-field appearance="outline" class="wizard__nota">
+        <mat-label>Nota (obligatoria)</mat-label>
+        <textarea matInput [value]="nota()" (input)="nota.set($any($event.target).value)" rows="2" maxlength="40"></textarea>
+        <mat-hint align="end">Maximo 40 caracteres</mat-hint>
+      </mat-form-field>
+
+      <mat-card appearance="outlined" class="wizard__resumen">
+        <mat-card-content>
+          <p><strong>Especialidad:</strong> {{ nombreEspecialidad() }}</p>
+          <p><strong>Medico:</strong> {{ nombreMedico() }}</p>
+          <p><strong>Sede:</strong> {{ nombreSede() }}</p>
+          <p><strong>Fecha:</strong> {{ fecha() | date: 'dd/MM/yyyy' }}</p>
+          <p><strong>Hora:</strong> {{ hora() }}</p>
+          @if (coberturaNombre()) { <p><strong>Cobertura:</strong> {{ coberturaNombre() }}</p> }
+        </mat-card-content>
+      </mat-card>
+
+      <div class="wizard__acciones">
+        <button mat-button matStepperPrevious>Atras</button>
+        <button mat-flat-button (click)="confirmar()" [disabled]="guardando()">
+          @if (guardando()) { <mat-spinner diameter="20" /> } @else { Confirmar turno }
+        </button>
+      </div>
+    </mat-step>
+  </mat-stepper>
+}

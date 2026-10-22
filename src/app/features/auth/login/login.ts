@@ -42,6 +42,9 @@ export class Login {
     password: ['', [Validators.required]],
   });
 
+  /** Se activa cuando el usuario llega al login por un token vencido. */
+  readonly sesionVencida = this.route.snapshot.queryParamMap.get('vencida') === '1';
+
   enviar(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();

@@ -16,9 +16,9 @@ export interface NavItem {
 export const NAV_POR_ROL: Record<Rol, NavItem[]> = {
   paciente: [
     { label: 'Inicio', icon: 'home', ruta: '/' },
-    { label: 'Mi perfil', icon: 'account_circle', ruta: '/perfil' },
     { label: 'Sacar turno', icon: 'event_available', ruta: '/paciente/turnos/nuevo' },
     { label: 'Mis turnos', icon: 'event_note', ruta: '/paciente/turnos' },
+    { label: 'Mis datos', icon: 'badge', ruta: '/paciente/mis-datos' },
   ],
   medico: [
     { label: 'Inicio', icon: 'home', ruta: '/' },

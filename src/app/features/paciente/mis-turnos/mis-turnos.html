@@ -1,0 +1,50 @@
+<div class="pagina">
+  <div class="pagina__header">
+    <h1 class="pagina__titulo"><mat-icon>event_note</mat-icon> Mis turnos</h1>
+  </div>
+
+  @if (cargando()) {
+    <app-cargando />
+  } @else if (turnos().length === 0) {
+    <app-sin-datos mensaje="Todavia no tenes turnos. Saca uno desde 'Sacar turno'." icono="event_busy" />
+  } @else {
+    <mat-accordion>
+      @for (t of turnos(); track t.id) {
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ t.fecha | date: 'dd/MM/yyyy' }} - {{ t.hora }}
+            </mat-panel-title>
+            <mat-panel-description>
+              <span class="chip-estado chip-estado--{{ t.estado }}">{{ t.estado }}</span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <div class="detalle-turno">
+            <p><strong>Especialista:</strong> {{ t.medico_apellido }}, {{ t.medico_nombre }}</p>
+            <p><strong>Especialidad:</strong> {{ t.especialidad }}</p>
+            <p><strong>Sede:</strong> {{ t.sede }}</p>
+            @if (t.nota) { <p><strong>Nota:</strong> {{ t.nota }}</p> }
+
+            @if (t.estado === 'atendido' && historialDe(t); as h) {
+              <div class="detalle-turno__historial">
+                <h4>Historial clinico</h4>
+                <p><strong>Diagnostico:</strong> {{ h.diagnostico }}</p>
+                @if (h.tratamiento) { <p><strong>Tratamiento:</strong> {{ h.tratamiento }}</p> }
+                @if (h.observaciones) { <p><strong>Observaciones:</strong> {{ h.observaciones }}</p> }
+              </div>
+            }
+          </div>
+
+          @if (t.estado === 'confirmado') {
+            <mat-action-row>
+              <button mat-stroked-button color="warn" (click)="cancelar(t)">
+                <mat-icon>cancel</mat-icon> Cancelar turno
+              </button>
+            </mat-action-row>
+          }
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+  }
+</div>

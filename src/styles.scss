@@ -149,3 +149,96 @@ table.tabla {
   color: var(--mat-sys-on-error-container);
   font-size: 0.9rem;
 }
+
+.acciones-form {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.auth__aviso {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background-color: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+  font-size: 0.9rem;
+}
+
+.aviso-consulta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.9rem;
+}
+
+/* Cabecera de un paciente seleccionado (historial / asignar turno) */
+.paciente-sel {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+
+  h2 {
+    margin: 0;
+    font: var(--mat-sys-title-large);
+
+    small {
+      color: var(--mat-sys-on-surface-variant);
+      font-size: 0.85rem;
+    }
+  }
+}
+
+.historial-card {
+  margin-bottom: 1rem;
+
+  p {
+    margin: 0.3rem 0;
+  }
+}
+
+/* Mis datos: bloque de lectura */
+.datos-lectura {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__label {
+    font-size: 0.8rem;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.datos-titulo {
+  margin: 0.5rem 0 1rem;
+  font: var(--mat-sys-title-medium);
+}
+
+/* Detalle de turno (mis turnos) */
+.detalle-turno {
+  p {
+    margin: 0.3rem 0;
+  }
+
+  &__historial {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--mat-sys-outline-variant);
+
+    h4 {
+      margin: 0 0 0.5rem;
+    }
+  }
+}
