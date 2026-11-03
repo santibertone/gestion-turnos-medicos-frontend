@@ -468,3 +468,13 @@ html.tema-claro .chip-estado--atendido {
   background-color: #c8e6c9;
   color: #1b5e20;
 }
+
+/* Panel del menu de notificaciones: destrabar ancho y quitar padding interno */
+.notif-menu.mat-mdc-menu-panel {
+  max-width: 380px !important;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.notif-menu .mat-mdc-menu-content {
+  padding: 0 !important;
+}

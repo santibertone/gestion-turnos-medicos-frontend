@@ -169,22 +169,17 @@
     }
 
     &--no-leida {
-      background-color: color-mix(in srgb, var(--mat-sys-primary) 10%, transparent);
+      background-color: color-mix(in srgb, var(--mat-sys-primary) 14%, transparent);
+      border-left: 3px solid var(--mat-sys-primary);
+      padding-left: calc(1rem - 3px);
 
       .notif__mensaje {
         font-weight: 600;
       }
+    }
 
-      &::before {
-        content: '';
-        position: absolute;
-        left: 0.4rem;
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: var(--mat-sys-primary);
-        align-self: center;
-      }
+    &:last-child {
+      border-bottom: none;
     }
   }
 
