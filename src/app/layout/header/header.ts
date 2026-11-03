@@ -12,6 +12,7 @@ import { MatListModule } from '@angular/material/list';
 
 import { AuthService } from '../../core/services/auth.service';
 import { NotificacionService } from '../../core/services/notificacion.service';
+import { TemaService } from '../../core/services/tema.service';
 import { Notificacion } from '../../core/models/notificacion.model';
 import { ROL_LABEL } from '../../core/models/usuario.model';
 
@@ -41,6 +42,9 @@ export class Header {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly notificacionService = inject(NotificacionService);
+  private readonly temaService = inject(TemaService);
+
+  readonly temaOscuro = this.temaService.oscuro;
 
   /** Se emite para abrir/cerrar el menu lateral desde el shell. */
   readonly menuToggle = output<void>();
@@ -103,6 +107,10 @@ export class Header {
         lista.map((n) => (n.id === notificacion.id ? { ...n, leida: 1 } : n)),
       );
     });
+  }
+
+  alternarTema(): void {
+    this.temaService.alternar();
   }
 
   cerrarSesion(): void {

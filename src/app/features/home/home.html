@@ -32,18 +32,28 @@
     </div>
   </section>
 } @else {
-  <section class="bienvenida">
-    <h1 class="bienvenida__titulo">
-      Hola, {{ usuario()?.nombre }} 👋
-    </h1>
-    <p class="bienvenida__texto">
-      Ingresaste como
-      <strong>{{ rol() ? rolLabel[rol()!] : '' }}</strong>.
-      Elegi una funcion del menu para comenzar.
-    </p>
-    <a mat-flat-button routerLink="/perfil">
-      <mat-icon>account_circle</mat-icon>
-      Ver mi perfil
-    </a>
+  <section class="dashboard">
+    <header class="dashboard__hola">
+      <div>
+        <h1 class="dashboard__titulo">Hola, {{ usuario()?.nombre }} 👋</h1>
+        <p class="dashboard__sub">
+          Ingresaste como <strong>{{ rol() ? rolLabel[rol()!] : '' }}</strong>.
+          Elegi una funcion para comenzar.
+        </p>
+      </div>
+    </header>
+
+    <div class="dashboard__grid">
+      @for (a of accesos(); track a.ruta) {
+        <a class="acceso" [routerLink]="a.ruta">
+          <span class="acceso__icono"><mat-icon>{{ a.icon }}</mat-icon></span>
+          <span class="acceso__texto">
+            <span class="acceso__titulo">{{ a.label }}</span>
+            <span class="acceso__desc">{{ a.descripcion }}</span>
+          </span>
+          <mat-icon class="acceso__flecha">chevron_right</mat-icon>
+        </a>
+      }
+    </div>
   </section>
 }

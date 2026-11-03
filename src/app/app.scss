@@ -1,23 +1,20 @@
 .shell {
-  // Alto total menos la barra superior (64px desktop / 56px mobile).
+  // Alto total menos la barra superior (64px).
   height: calc(100dvh - 64px);
+  background: var(--mat-sys-background);
 
   &__sidenav {
-    width: 260px;
+    width: 272px;
+    border-right: 1px solid var(--mat-sys-outline-variant);
   }
 
   &__contenido {
     display: flex;
     flex-direction: column;
+    background: var(--mat-sys-background);
   }
 
   &__main {
     flex: 1 1 auto;
-  }
-}
-
-@media (max-width: 599px) {
-  .shell {
-    height: calc(100dvh - 56px);
   }
 }

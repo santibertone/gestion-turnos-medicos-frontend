@@ -13,28 +13,69 @@ html {
         primary: mat.$azure-palette,
         tertiary: mat.$blue-palette,
       ),
-      typography: Roboto,
+      typography: Inter,
       density: 0,
     )
   );
+
+  // ---- Tema OSCURO profesional (ajuste fino sobre el tema M3) --------------
+  // Azul brillante sobre neutros slate oscuros. color-scheme: dark hace que los
+  // componentes Material que no sobrescribimos usen tambien su variante oscura.
+  color-scheme: dark;
+
+  --mat-sys-primary: #5a9bff;
+  --mat-sys-on-primary: #0a1836;
+  --mat-sys-primary-container: #1e3a8a;
+  --mat-sys-on-primary-container: #d9e4ff;
+  --mat-sys-secondary-container: #243356;
+  --mat-sys-on-secondary-container: #d2e0ff;
+
+  --mat-sys-background: #0f1623;
+  --mat-sys-surface: #182235;
+  --mat-sys-surface-container-low: #141d2e;
+  --mat-sys-surface-container: #1d283c;
+  --mat-sys-surface-container-high: #243247;
+  --mat-sys-surface-container-highest: #2b3a52;
+
+  --mat-sys-on-surface: #e6ebf3;
+  --mat-sys-on-surface-variant: #9aa7bd;
+  --mat-sys-outline: #5a6b85;
+  --mat-sys-outline-variant: #2e3b52;
+}
+
+// ---- Tema CLARO (se activa con la clase .tema-claro desde el toggle) --------
+html.tema-claro {
+  color-scheme: light;
+
+  --mat-sys-primary: #2563eb;
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: #dbe4ff;
+  --mat-sys-on-primary-container: #0b2b6b;
+  --mat-sys-secondary-container: #e3ecff;
+  --mat-sys-on-secondary-container: #1b3a8a;
+
+  --mat-sys-background: #eef2f7;
+  --mat-sys-surface: #ffffff;
+  --mat-sys-surface-container-low: #fbfcfe;
+  --mat-sys-surface-container: #f3f6fb;
+  --mat-sys-surface-container-high: #eaeff7;
+  --mat-sys-surface-container-highest: #e3e9f2;
+
+  --mat-sys-on-surface: #1e293b;
+  --mat-sys-on-surface-variant: #5b6b82;
+  --mat-sys-outline: #cbd5e1;
+  --mat-sys-outline-variant: #e2e8f0;
 }
 
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
-  color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
+  background-color: var(--mat-sys-background);
   color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
+  font-family: Inter, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.95rem;
 
-  // Reset the user agent margin.
   margin: 0;
   height: 100%;
+  -webkit-font-smoothing: antialiased;
 }
 /* ==========================================================================
    Clases utilitarias compartidas por las pantallas internas (listados, filtros,
@@ -151,8 +192,8 @@ th.acciones {
   color: var(--mat-sys-on-primary-container);
 }
 .chip-estado--atendido {
-  background-color: #c8e6c9;
-  color: #1b5e20;
+  background-color: #14532d;
+  color: #bbf7d0;
 }
 .chip-estado--cancelado {
   background-color: var(--mat-sys-error-container);
@@ -309,15 +350,6 @@ mat-icon.material-symbols-outlined {
    Pulido visual general: animaciones, hover de botones y scrollbar.
    ========================================================================== */
 
-/* Animacion de entrada de cada pantalla */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.pagina {
-  animation: fadeInUp 0.28s ease both;
-}
-
 /* Botones: leve elevacion al pasar el mouse */
 .mat-mdc-unelevated-button,
 .mat-mdc-outlined-button,
@@ -365,4 +397,74 @@ mat-icon.material-symbols-outlined {
 /* Diálogos un poco mas redondeados */
 .mat-mdc-dialog-container .mdc-dialog__surface {
   border-radius: 16px !important;
+}
+
+/* ==========================================================================
+   Aspecto profesional: tarjetas, botones y titulos.
+   ========================================================================== */
+
+/* Tarjetas: borde sutil, esquinas y sombra suave */
+.mat-mdc-card {
+  border-radius: 16px !important;
+  border: 1px solid var(--mat-sys-outline-variant);
+  box-shadow: 0 1px 2px rgb(15 23 42 / 4%), 0 4px 16px rgb(15 23 42 / 4%) !important;
+}
+
+/* Botones: contenido (icono + texto) siempre centrado, con buen espaciado */
+.mat-mdc-button,
+.mat-mdc-unelevated-button,
+.mat-mdc-outlined-button,
+.mat-mdc-raised-button {
+  border-radius: 10px !important;
+  letter-spacing: 0.2px;
+
+  .mdc-button__label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+  }
+
+  mat-icon {
+    margin: 0 !important;
+    font-size: 1.2rem;
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+}
+
+/* Botones de accion grandes (submit de formularios) a lo ancho */
+.btn-bloque {
+  width: 100%;
+  height: 46px;
+}
+
+/* Titulos de pantalla un poco mas marcados */
+.pagina__titulo {
+  font-weight: 600;
+
+  mat-icon {
+    color: var(--mat-sys-primary);
+  }
+}
+
+/* Form fields: fondo blanco sutil */
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+/* Botones cuyo contenido va envuelto en <span> tambien centran icono + texto */
+.mat-mdc-button .mdc-button__label > span,
+.mat-mdc-unelevated-button .mdc-button__label > span,
+.mat-mdc-outlined-button .mdc-button__label > span,
+.mat-mdc-raised-button .mdc-button__label > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+/* Chip "atendido": version clara cuando el tema es claro */
+html.tema-claro .chip-estado--atendido {
+  background-color: #c8e6c9;
+  color: #1b5e20;
 }

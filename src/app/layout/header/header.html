@@ -17,11 +17,27 @@
   @if (!isAuthenticated()) {
     <div class="header__der">
       <span class="header__bienvenida">Bienvenido a la clinica virtual</span>
+      <button
+        mat-icon-button
+        (click)="alternarTema()"
+        [matTooltip]="temaOscuro() ? 'Modo claro' : 'Modo oscuro'"
+        aria-label="Cambiar tema"
+      >
+        <mat-icon>{{ temaOscuro() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
       <a mat-stroked-button routerLink="/login">Ingresar</a>
       <a mat-flat-button routerLink="/registro">Registrarse</a>
     </div>
   } @else {
     <div class="header__der">
+      <button
+        mat-icon-button
+        (click)="alternarTema()"
+        [matTooltip]="temaOscuro() ? 'Modo claro' : 'Modo oscuro'"
+        aria-label="Cambiar tema"
+      >
+        <mat-icon>{{ temaOscuro() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
       <button
         mat-icon-button
         class="header__campana"
