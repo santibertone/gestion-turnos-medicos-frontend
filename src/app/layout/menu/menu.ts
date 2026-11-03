@@ -4,6 +4,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 
 import { AuthService } from '../../core/services/auth.service';
+import { ROL_LABEL } from '../../core/models/usuario.model';
 import { NAV_POR_ROL, NavItem } from '../navigation';
 
 /** Menu lateral de navegacion con las opciones del rol logueado. */
@@ -18,6 +19,10 @@ export class Menu {
 
   /** Se emite al elegir una opcion (el shell cierra el menu en mobile). */
   readonly navegar = output<void>();
+
+  readonly usuario = this.auth.usuario;
+  readonly rol = this.auth.rol;
+  readonly rolLabel = ROL_LABEL;
 
   readonly items = computed<NavItem[]>(() => {
     const rol = this.auth.rol();

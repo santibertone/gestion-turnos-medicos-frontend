@@ -22,14 +22,14 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Desde</mat-label>
-      <input matInput [matDatepicker]="dp1" [value]="desde()" (dateChange)="desde.set($event.value)" readonly />
+      <input matInput [matDatepicker]="dp1" [value]="desde()" [max]="maxFecha" (dateChange)="desde.set($event.value)" readonly />
       <mat-datepicker-toggle matIconSuffix [for]="dp1" />
       <mat-datepicker #dp1 />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Hasta</mat-label>
-      <input matInput [matDatepicker]="dp2" [value]="hasta()" (dateChange)="hasta.set($event.value)" readonly />
+      <input matInput [matDatepicker]="dp2" [value]="hasta()" [max]="maxFecha" (dateChange)="hasta.set($event.value)" readonly />
       <mat-datepicker-toggle matIconSuffix [for]="dp2" />
       <mat-datepicker #dp2 />
     </mat-form-field>

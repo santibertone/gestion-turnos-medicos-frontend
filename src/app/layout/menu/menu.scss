@@ -1,9 +1,68 @@
 .menu {
-  padding-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__cabecera {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 1rem;
+    background: linear-gradient(135deg, var(--mat-sys-primary), var(--mat-sys-tertiary));
+    color: var(--mat-sys-on-primary);
+  }
+
+  &__avatar {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 25%);
+    font-weight: 600;
+    flex: 0 0 auto;
+  }
+
+  &__datos {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    overflow: hidden;
+  }
+
+  &__nombre {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__rol {
+    font-size: 0.78rem;
+    opacity: 0.9;
+  }
+
+  mat-nav-list {
+    padding: 0.5rem;
+    flex: 1 1 auto;
+  }
+
+  a[mat-list-item] {
+    border-radius: 10px;
+    margin-bottom: 0.15rem;
+
+    mat-icon {
+      color: var(--mat-sys-on-surface-variant);
+    }
+  }
 
   &__activo {
     background-color: var(--mat-sys-secondary-container);
     color: var(--mat-sys-on-secondary-container);
-    font-weight: 500;
+    font-weight: 600;
+
+    mat-icon {
+      color: var(--mat-sys-on-secondary-container) !important;
+    }
   }
 }

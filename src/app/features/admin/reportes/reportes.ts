@@ -38,6 +38,8 @@ export class Reportes {
   readonly cargando = signal(true);
   readonly desde = signal<Date | null>(null);
   readonly hasta = signal<Date | null>(null);
+  /** No se permite filtrar hacia el futuro: el tope es la fecha de hoy. */
+  readonly maxFecha = new Date();
 
   readonly porEspecialidad = signal<TurnosPorEspecialidad[]>([]);
   readonly porSede = signal<TurnosPorSede[]>([]);

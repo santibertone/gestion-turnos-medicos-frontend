@@ -1,55 +1,68 @@
 .footer {
-  background-color: var(--mat-sys-surface-container-high);
-  color: var(--mat-sys-on-surface);
-  padding: 2rem 1.5rem 1rem;
   margin-top: auto;
+  background: var(--mat-sys-surface-container);
+  color: var(--mat-sys-on-surface);
+  border-top: 1px solid var(--mat-sys-outline-variant);
 
   &__cols {
     display: flex;
     flex-wrap: wrap;
-    gap: 2rem;
-    max-width: 960px;
+    gap: 2.5rem;
+    max-width: 1100px;
     margin: 0 auto;
+    padding: 2.5rem 1.5rem 1.5rem;
   }
 
   &__col {
     flex: 1 1 220px;
+
+    &--marca {
+      flex: 1 1 280px;
+    }
   }
 
-  &__titulo {
-    margin: 0 0 0.75rem;
-    font-size: 1rem;
-    font-weight: 500;
-
-    &--redes {
-      margin-top: 1.25rem;
-    }
+  &__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--mat-sys-primary);
+    margin-bottom: 0.6rem;
   }
 
   &__texto {
     margin: 0;
     font-size: 0.9rem;
-    line-height: 1.5;
+    line-height: 1.55;
     color: var(--mat-sys-on-surface-variant);
+    max-width: 320px;
+  }
+
+  &__titulo {
+    margin: 0 0 0.9rem;
+    font-size: 0.95rem;
+    font-weight: 600;
   }
 
   &__linea {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin: 0.4rem 0;
-    font-size: 0.9rem;
+    gap: 0.55rem;
+    margin: 0.5rem 0;
+    font-size: 0.88rem;
     color: var(--mat-sys-on-surface-variant);
+
+    mat-icon {
+      color: var(--mat-sys-primary);
+      font-size: 1.15rem;
+    }
   }
 
-  &__redes {
-    display: flex;
-    gap: 0.25rem;
-  }
-
-  &__copy {
+  &__barra {
     text-align: center;
-    margin: 1.5rem 0 0;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--mat-sys-outline-variant);
     font-size: 0.8rem;
     color: var(--mat-sys-on-surface-variant);
   }

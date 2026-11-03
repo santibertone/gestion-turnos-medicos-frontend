@@ -78,6 +78,8 @@ body {
 
 .tabla-card {
   overflow: hidden;
+  border-radius: 14px;
+  padding: 0;
 }
 
 .tabla-wrap {
@@ -86,12 +88,51 @@ body {
 
 table.tabla {
   width: 100%;
+  background: transparent;
+
+  // Encabezado: fondo suave, mayusculas, mas legible.
+  th {
+    background-color: var(--mat-sys-surface-container-high);
+    color: var(--mat-sys-on-surface-variant);
+    font-weight: 600 !important;
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  th,
+  td {
+    padding: 0.9rem 1.25rem !important;
+    border-bottom-color: var(--mat-sys-outline-variant) !important;
+  }
+
+  // Filas con hover y transicion suave.
+  tr.mat-mdc-row {
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: var(--mat-sys-surface-container);
+    }
+
+    &:last-child td {
+      border-bottom: none;
+    }
+  }
 }
 
-.acciones {
+// Botones de accion dentro de la celda (alineados a la derecha).
+td .acciones {
   display: flex;
   gap: 0.25rem;
   justify-content: flex-end;
+}
+
+// Encabezado de la columna de acciones: celda normal, texto a la derecha
+// (sin esto, el flex rompia la celda y "Acciones" quedaba flotando).
+th.acciones {
+  display: table-cell;
+  text-align: right;
 }
 
 /* Chips de estado de turno */
@@ -241,4 +282,87 @@ table.tabla {
       margin: 0 0 0.5rem;
     }
   }
+}
+
+/* ==========================================================================
+   Iconos: usamos "Material Symbols Outlined" (set nueva, tiene todos los iconos).
+   FILL 1 para que se vean rellenos/solidos, consistentes en toda la app.
+   ========================================================================== */
+.material-symbols-outlined,
+mat-icon.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'liga';
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* ==========================================================================
+   Pulido visual general: animaciones, hover de botones y scrollbar.
+   ========================================================================== */
+
+/* Animacion de entrada de cada pantalla */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.pagina {
+  animation: fadeInUp 0.28s ease both;
+}
+
+/* Botones: leve elevacion al pasar el mouse */
+.mat-mdc-unelevated-button,
+.mat-mdc-outlined-button,
+.mat-mdc-raised-button {
+  transition: box-shadow 0.2s ease, transform 0.12s ease, background-color 0.2s ease !important;
+
+  &:hover:not([disabled]) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgb(0 0 0 / 14%);
+  }
+  &:active:not([disabled]) {
+    transform: translateY(0);
+  }
+}
+
+/* Botones de icono: fondo suave al pasar el mouse */
+.mat-mdc-icon-button {
+  transition: background-color 0.2s ease, transform 0.12s ease !important;
+  &:hover:not([disabled]) {
+    transform: translateY(-1px);
+  }
+}
+
+/* Tarjetas: sombra mas suave y transicion */
+.mat-mdc-card {
+  transition: box-shadow 0.2s ease;
+}
+
+/* Scrollbar prolija (WebKit) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--mat-sys-outline-variant);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--mat-sys-outline);
+  background-clip: padding-box;
+}
+
+/* Diálogos un poco mas redondeados */
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 16px !important;
 }

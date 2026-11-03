@@ -38,6 +38,8 @@ export class Auditoria {
   readonly desde = signal<Date | null>(null);
   readonly hasta = signal<Date | null>(null);
   readonly texto = signal('');
+  /** No se permite filtrar hacia el futuro: el tope es la fecha de hoy. */
+  readonly maxFecha = new Date();
 
   // Paginacion (cliente).
   readonly pagina = signal(0);

@@ -1,4 +1,12 @@
 <nav class="menu">
+  <div class="menu__cabecera">
+    <div class="menu__avatar">{{ (usuario()?.nombre)?.[0] }}{{ (usuario()?.apellido)?.[0] }}</div>
+    <div class="menu__datos">
+      <span class="menu__nombre">{{ usuario()?.nombre }} {{ usuario()?.apellido }}</span>
+      <span class="menu__rol">{{ rol() ? rolLabel[rol()!] : '' }}</span>
+    </div>
+  </div>
+
   <mat-nav-list>
     @for (item of items(); track item.ruta) {
       <a

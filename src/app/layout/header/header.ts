@@ -1,6 +1,7 @@
-import { Component, effect, inject, output, signal } from '@angular/core';
+import { Component, computed, effect, inject, output, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { filter } from 'rxjs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -53,6 +54,13 @@ export class Header {
   readonly notificaciones = signal<Notificacion[]>([]);
   readonly cargandoNotif = signal(false);
 
+  /** Iniciales del usuario para el avatar. */
+  readonly iniciales = computed(() => {
+    const u = this.usuario();
+    if (!u) return '';
+    return `${u.nombre?.[0] ?? ''}${u.apellido?.[0] ?? ''}`.toUpperCase();
+  });
+
   constructor() {
     // Al iniciar sesion, refrescamos el contador de notificaciones no leidas.
     effect(() => {
@@ -60,6 +68,16 @@ export class Header {
         this.notificacionService.refrescarConteo();
       }
     });
+
+    // Tambien al navegar entre pantallas (asi el contador se actualiza cuando
+    // el usuario recibe notificaciones por acciones de otros).
+    this.router.events
+      .pipe(filter((e) => e instanceof NavigationEnd))
+      .subscribe(() => {
+        if (this.isAuthenticated()) {
+          this.notificacionService.refrescarConteo();
+        }
+      });
   }
 
   /** Carga el listado al abrir el menu de la campana. */
