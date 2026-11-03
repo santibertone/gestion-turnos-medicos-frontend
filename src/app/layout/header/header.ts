@@ -1,6 +1,7 @@
-import { Component, effect, inject, output, signal } from '@angular/core';
+import { Component, computed, effect, inject, output, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { filter } from 'rxjs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,6 +12,7 @@ import { MatListModule } from '@angular/material/list';
 
 import { AuthService } from '../../core/services/auth.service';
 import { NotificacionService } from '../../core/services/notificacion.service';
+import { TemaService } from '../../core/services/tema.service';
 import { Notificacion } from '../../core/models/notificacion.model';
 import { ROL_LABEL } from '../../core/models/usuario.model';
 
@@ -40,6 +42,9 @@ export class Header {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly notificacionService = inject(NotificacionService);
+  private readonly temaService = inject(TemaService);
+
+  readonly temaOscuro = this.temaService.oscuro;
 
   /** Se emite para abrir/cerrar el menu lateral desde el shell. */
   readonly menuToggle = output<void>();
@@ -53,6 +58,13 @@ export class Header {
   readonly notificaciones = signal<Notificacion[]>([]);
   readonly cargandoNotif = signal(false);
 
+  /** Iniciales del usuario para el avatar. */
+  readonly iniciales = computed(() => {
+    const u = this.usuario();
+    if (!u) return '';
+    return `${u.nombre?.[0] ?? ''}${u.apellido?.[0] ?? ''}`.toUpperCase();
+  });
+
   constructor() {
     // Al iniciar sesion, refrescamos el contador de notificaciones no leidas.
     effect(() => {
@@ -60,6 +72,16 @@ export class Header {
         this.notificacionService.refrescarConteo();
       }
     });
+
+    // Tambien al navegar entre pantallas (asi el contador se actualiza cuando
+    // el usuario recibe notificaciones por acciones de otros).
+    this.router.events
+      .pipe(filter((e) => e instanceof NavigationEnd))
+      .subscribe(() => {
+        if (this.isAuthenticated()) {
+          this.notificacionService.refrescarConteo();
+        }
+      });
   }
 
   /** Carga el listado al abrir el menu de la campana. */
@@ -85,6 +107,10 @@ export class Header {
         lista.map((n) => (n.id === notificacion.id ? { ...n, leida: 1 } : n)),
       );
     });
+  }
+
+  alternarTema(): void {
+    this.temaService.alternar();
   }
 
   cerrarSesion(): void {

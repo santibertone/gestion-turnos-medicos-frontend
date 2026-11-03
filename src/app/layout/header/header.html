@@ -1,12 +1,7 @@
-<mat-toolbar color="primary" class="header">
+<mat-toolbar class="header">
   <div class="header__izq">
     @if (isAuthenticated()) {
-      <button
-        mat-icon-button
-        aria-label="Abrir menu"
-        matTooltip="Menu"
-        (click)="menuToggle.emit()"
-      >
+      <button mat-icon-button aria-label="Abrir menu" matTooltip="Menu" (click)="menuToggle.emit()">
         <mat-icon>menu</mat-icon>
       </button>
     }
@@ -22,6 +17,14 @@
   @if (!isAuthenticated()) {
     <div class="header__der">
       <span class="header__bienvenida">Bienvenido a la clinica virtual</span>
+      <button
+        mat-icon-button
+        (click)="alternarTema()"
+        [matTooltip]="temaOscuro() ? 'Modo claro' : 'Modo oscuro'"
+        aria-label="Cambiar tema"
+      >
+        <mat-icon>{{ temaOscuro() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
       <a mat-stroked-button routerLink="/login">Ingresar</a>
       <a mat-flat-button routerLink="/registro">Registrarse</a>
     </div>
@@ -29,15 +32,22 @@
     <div class="header__der">
       <button
         mat-icon-button
+        (click)="alternarTema()"
+        [matTooltip]="temaOscuro() ? 'Modo claro' : 'Modo oscuro'"
+        aria-label="Cambiar tema"
+      >
+        <mat-icon>{{ temaOscuro() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        class="header__campana"
         aria-label="Notificaciones"
         matTooltip="Notificaciones"
         [matMenuTriggerFor]="notifMenu"
         (menuOpened)="abrirNotificaciones()"
       >
         @if (noLeidas() > 0) {
-          <mat-icon [matBadge]="noLeidas()" matBadgeColor="warn" matBadgeSize="small">
-            notifications
-          </mat-icon>
+          <mat-icon [matBadge]="noLeidas()" matBadgeColor="warn" matBadgeSize="small">notifications</mat-icon>
         } @else {
           <mat-icon>notifications</mat-icon>
         }
@@ -52,11 +62,7 @@
           } @else {
             <ul class="notif__lista">
               @for (n of notificaciones(); track n.id) {
-                <li
-                  class="notif__item"
-                  [class.notif__item--no-leida]="!n.leida"
-                  (click)="marcarLeida(n)"
-                >
+                <li class="notif__item" [class.notif__item--no-leida]="!n.leida" (click)="marcarLeida(n)">
                   <span class="notif__mensaje">{{ n.mensaje }}</span>
                   <span class="notif__fecha">{{ n.fecha | date: 'dd/MM/yyyy HH:mm' }}</span>
                 </li>
@@ -66,35 +72,31 @@
         </div>
       </mat-menu>
 
-      <span class="header__usuario">
-        {{ usuario()?.nombre }} {{ usuario()?.apellido }}
-      </span>
-
-      <button
-        mat-icon-button
-        aria-label="Informacion del usuario"
-        matTooltip="Tipo de usuario"
-        [matMenuTriggerFor]="infoMenu"
-      >
-        <mat-icon>info</mat-icon>
+      <!-- Perfil: avatar + nombre + tipo de usuario, abre el menu con detalle y cerrar sesion -->
+      <button class="header__perfil" [matMenuTriggerFor]="perfilMenu" aria-label="Menu de usuario">
+        <span class="header__avatar">{{ iniciales() }}</span>
+        <span class="header__perfil-texto">
+          <span class="header__usuario">{{ usuario()?.nombre }} {{ usuario()?.apellido }}</span>
+          <span class="header__rol">{{ rol() ? rolLabel[rol()!] : '' }}</span>
+        </span>
+        <mat-icon class="header__chevron">expand_more</mat-icon>
       </button>
-      <mat-menu #infoMenu="matMenu">
-        <div class="header__info">
-          <p class="header__info-rol">
-            <mat-icon inline>badge</mat-icon>
-            {{ rol() ? rolLabel[rol()!] : '' }}
-          </p>
-          @if (usuario(); as u) {
-            <p class="header__info-dato">{{ u.email }}</p>
-            <p class="header__info-dato">DNI {{ u.dni }}</p>
-          }
-        </div>
+      <mat-menu #perfilMenu="matMenu">
+        @if (usuario(); as u) {
+          <div class="header__info" (click)="$event.stopPropagation()">
+            <p class="header__info-nombre">{{ u.nombre }} {{ u.apellido }}</p>
+            <p class="header__info-dato"><mat-icon inline>badge</mat-icon> {{ rol() ? rolLabel[rol()!] : '' }}</p>
+            <p class="header__info-dato"><mat-icon inline>mail</mat-icon> {{ u.email }}</p>
+            <p class="header__info-dato"><mat-icon inline>fingerprint</mat-icon> DNI {{ u.dni }}</p>
+          </div>
+        }
+        <button mat-menu-item routerLink="/perfil">
+          <mat-icon>account_circle</mat-icon> Mi perfil
+        </button>
+        <button mat-menu-item (click)="cerrarSesion()">
+          <mat-icon>logout</mat-icon> Cerrar sesion
+        </button>
       </mat-menu>
-
-      <button mat-stroked-button (click)="cerrarSesion()">
-        <mat-icon>logout</mat-icon>
-        Cerrar sesion
-      </button>
     </div>
   }
 </mat-toolbar>

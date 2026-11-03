@@ -2,13 +2,13 @@
 
 <mat-sidenav-container class="shell">
   @if (isAuthenticated()) {
-    <mat-sidenav #drawer mode="over" class="shell__sidenav">
-      <app-menu (navegar)="drawer.close()" />
+    <mat-sidenav #drawer mode="side" opened class="shell__sidenav">
+      <app-menu />
     </mat-sidenav>
   }
 
   <mat-sidenav-content class="shell__contenido">
-    <main class="shell__main">
+    <main class="shell__main" [@routeAnimations]="rutaActual()">
       <router-outlet />
     </main>
     <app-footer />

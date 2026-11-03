@@ -38,6 +38,8 @@ export class Reportes {
   readonly cargando = signal(true);
   readonly desde = signal<Date | null>(null);
   readonly hasta = signal<Date | null>(null);
+  /** No se permite filtrar hacia el futuro: el tope es la fecha de hoy. */
+  readonly maxFecha = new Date();
 
   readonly porEspecialidad = signal<TurnosPorEspecialidad[]>([]);
   readonly porSede = signal<TurnosPorSede[]>([]);
@@ -52,7 +54,7 @@ export class Reportes {
       {
         data: this.porEspecialidad().map((e) => Number(e.cantidad_turnos)),
         label: 'Turnos',
-        backgroundColor: '#1565c0',
+        backgroundColor: '#5a9bff',
         borderRadius: 6,
       },
     ],
@@ -64,21 +66,30 @@ export class Reportes {
     datasets: [
       {
         data: this.porSede().map((s) => Number(s.cantidad_turnos)),
-        backgroundColor: ['#1565c0', '#42a5f5', '#90caf9', '#0d47a1', '#64b5f6'],
+        backgroundColor: ['#5a9bff', '#3b82f6', '#93c5fd', '#1e40af', '#60a5fa'],
+        borderColor: '#182235',
+        borderWidth: 2,
       },
     ],
   }));
+
+  // Color neutro que se lee bien tanto en tema oscuro como claro.
+  private readonly textoClaro = '#8291a8';
+  private readonly grilla = 'rgba(130, 145, 168, 0.2)';
 
   readonly opciones = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: { legend: { display: false } },
-    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+    scales: {
+      y: { beginAtZero: true, ticks: { precision: 0, color: this.textoClaro }, grid: { color: this.grilla } },
+      x: { ticks: { color: this.textoClaro }, grid: { color: this.grilla } },
+    },
   };
   readonly opcionesTorta = {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: { legend: { position: 'bottom' as const } },
+    plugins: { legend: { position: 'bottom' as const, labels: { color: '#8291a8' } } },
   };
 
   readonly hayDatos = computed(

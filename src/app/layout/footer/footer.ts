@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 
 /** Pie de pagina con los datos de contacto de la clinica. */
 @Component({
   selector: 'app-footer',
-  imports: [MatIconModule, MatButtonModule],
+  imports: [MatIconModule],
   templateUrl: './footer.html',
   styleUrl: './footer.scss',
 })
