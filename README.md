@@ -47,7 +47,7 @@ especialidades y coberturas variadas, y **turnos en los tres estados**
 ```bash
 cd backend
 # archivo .env (no se versiona) con:
-#   PORT=3000
+#   PORT=3200
 #   DB_HOST=localhost
 #   DB_PORT=3306
 #   DB_USER=root
@@ -56,7 +56,7 @@ cd backend
 #   JWT_SECRET=una_clave_secreta
 #   JWT_EXPIRES_IN=1d
 npm install
-npm run dev          # http://localhost:3000  (CORS habilitado para :4200)
+npm run dev          # http://localhost:3200  (CORS habilitado para :4200)
 ```
 
 ### 3) Frontend (este repositorio)
